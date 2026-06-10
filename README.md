@@ -68,16 +68,7 @@ InternHub/
 - Internship Recommendations
 - Analytics Dashboard
 - Dark Mode
-- AI-Based Internship Suggestions
-
-## 📸 Screenshots
-
-Add screenshots here:
-
-- Home Page
-- Login Page
-- Student Dashboard
-- Admin Dashboard
+- AI-Based Internship Suggestions.
 
 ## 👩‍💻 Author
 
