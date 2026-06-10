@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracker – InternHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0eff8;
+    min-height: 100vh;
+    padding-bottom: 90px;
+    color: #1a1a2e;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: #fff;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ece9f8;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #534AB7;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon i { font-size: 18px; color: #EEEDFE; }
+  .topbar h1 { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+
+  .add-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #534AB7;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    transition: background 0.15s;
+  }
+  .add-btn:hover { background: #3C3489; }
+  .add-btn i { font-size: 20px; }
+
+  /* ── MAIN ── */
+  .main { padding: 1.25rem; max-width: 480px; margin: 0 auto; }
+
+  /* ── SUMMARY STRIP ── */
+  .summary-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+
+  .sum-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border: 1.5px solid #ece9f8;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  }
+
+  .sum-card:hover, .sum-card.active {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(83,74,183,0.12);
+  }
+
+  .sum-card.active { border-color: #534AB7; }
+
+  .sum-num { font-size: 20px; font-weight: 700; color: #1a1a2e; line-height: 1; }
+  .sum-lbl { font-size: 10px; color: #aaa; font-weight: 500; margin-top: 3px; }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+  }
+
+  .dot.all      { background: #534AB7; }
+  .dot.applied  { background: #7F77DD; }
+  .dot.interview{ background: #EF9F27; }
+  .dot.selected { background: #639922; }
+  .dot.rejected { background: #E24B4A; }
+
+  /* ── SEARCH + FILTER ── */
+  .search-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+    align-items: center;
+  }
+
+  .search-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1.5px solid #ece9f8;
+    border-radius: 12px;
+    padding: 9px 12px;
+    transition: border-color 0.2s;
+  }
+
+  .search-box:focus-within { border-color: #534AB7; }
+  .search-box i { font-size: 17px; color: #aaa; }
+
+  .search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    background: transparent;
+    color: #1a1a2e;
+  }
+
+  .search-box input::placeholder { color: #ccc; }
+
+  .filter-btn {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #534AB7;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .filter-btn:hover { background: #f4f3fb; }
+  .filter-btn i { font-size: 18px; }
+
+  /* ── FILTER TABS ── */
+  .filter-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 1rem;
+    scrollbar-width: none;
+  }
+
+  .filter-tabs::-webkit-scrollbar { display: none; }
+
+  .ftab {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 99px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ftab.active { background: #534AB7; color: #fff; border-color: #534AB7; }
+  .ftab:hover:not(.active) { background: #f4f3fb; color: #534AB7; }
+
+  /* ── KANBAN PIPELINE ── */
+  .pipeline {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 1.25rem;
+    scrollbar-width: none;
+  }
+
+  .pipeline::-webkit-scrollbar { display: none; }
+
+  .pipe-step {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 60px;
+  }
+
+  .pipe-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    border: 2px solid #ece9f8;
+    background: #fff;
+  }
+
+  .pipe-dot.done { background: #534AB7; border-color: #534AB7; color: #fff; }
+  .pipe-dot.now  { background: #EAF3DE; border-color: #639922; color: #3B6D11; }
+
+  .pipe-lbl { font-size: 10px; color: #aaa; font-weight: 500; text-align: center; }
+  .pipe-lbl.done { color: #534AB7; font-weight: 700; }
+
+  .pipe-line {
+    flex: 1;
+    height: 2px;
+    background: #ece9f8;
+    align-self: center;
+    margin-bottom: 18px;
+    min-width: 16px;
+  }
+
+  .pipe-line.done { background: #534AB7; }
+
+  /* ── APP CARDS ── */
+  .app-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .app-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1rem;
+    border: 1.5px solid #ece9f8;
+    transition: box-shadow 0.15s, transform 0.15s;
+    cursor: pointer;
+  }
+
+  .app-card:hover {
+    box-shadow: 0 4px 16px rgba(83,74,183,0.10);
+    transform: translateY(-1px);
+  }
+
+  .app-card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .co-logo {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: #f4f3fb;
+    border: 1.5px solid #ece9f8;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .app-meta { flex: 1; min-width: 0; }
+  .app-meta h4 { font-size: 14px; font-weight: 700; color: #1a1a2e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .app-meta p  { font-size: 12px; color: #888; margin-top: 2px; }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge.applied   { background: #EEEDFE; color: #3C3489; }
+  .badge.interview { background: #FAEEDA; color: #854F0B; }
+  .badge.selected  { background: #EAF3DE; color: #3B6D11; }
+  .badge.rejected  { background: #FCEBEB; color: #A32D2D; }
+  .badge.offer     { background: #E1F5EE; color: #0F6E56; }
+
+  .app-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid #f4f3fb;
+  }
+
+  .footer-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .fchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #888;
+    background: #f9f9ff;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid #ece9f8;
+  }
+
+  .fchip i { font-size: 12px; }
+
+  .action-row { display: flex; gap: 6px; }
+
+  .icon-btn {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    border: 1px solid #ece9f8;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #aaa;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .icon-btn:hover { color: #534AB7; background: #f4f3fb; }
+  .icon-btn.danger:hover { color: #E24B4A; background: #FCEBEB; }
+  .icon-btn i { font-size: 15px; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    display: none;
+  }
+
+  .empty-state .empty-icon {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    background: #EEEDFE;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+  }
+
+  .empty-state .empty-icon i { font-size: 32px; color: #534AB7; }
+  .empty-state h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .empty-state p  { font-size: 13px; color: #888; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid #ece9f8;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 14px;
+    z-index: 50;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    color: #bbb;
+    font-size: 10px;
+    font-weight: 500;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    padding: 0 12px;
+    transition: color 0.15s;
+  }
+
+  .nav-item i { font-size: 22px; }
+  .nav-item.active { color: #534AB7; }
+  .nav-item:hover  { color: #534AB7; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,26,46,0.5);
+    z-index: 100;
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    padding: 1.5rem 1.25rem 2rem;
+    width: 100%; max-width: 480px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  }
+
+  .modal-overlay.show .modal { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: #ece9f8;
+    border-radius: 2px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: #1a1a2e; }
+
+  .form-field { margin-bottom: 0.9rem; }
+
+  .form-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  .form-field input,
+  .form-field select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    border: 1.5px solid #e8e6f5;
+    border-radius: 10px;
+    background: #fafafa;
+    color: #1a1a2e;
+    outline: none;
+    transition: border 0.2s;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus { border-color: #534AB7; background: #fff; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .modal-save-btn {
+    width: 100%;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 12px;
+    background: #534AB7;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.15s;
+  }
+
+  .modal-save-btn:hover { background: #3C3489; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 90px; left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: #1a1a2e;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 99px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    z-index: 200;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-icon"><i class="ti ti-school"></i></div>
+    <h1>Tracker</h1>
+  </div>
+  <button class="add-btn" onclick="openModal()" aria-label="Add application">
+    <i class="ti ti-plus"></i>
+  </button>
+</div>
+
+<div class="main">
+
+  <!-- SUMMARY STRIP -->
+  <div class="summary-strip" id="summaryStrip">
+    <div class="sum-card active" onclick="filterByStatus('all')">
+      <div class="dot all"></div>
+      <div class="sum-num" id="cnt-all">0</div>
+      <div class="sum-lbl">Total</div>
+    </div>
+    <div class="sum-card" onclick="filterByStatus('interview')">
+      <div class="dot interview"></div>
+      <div class="sum-num" id="cnt-interview">0</div>
+      <div class="sum-lbl">Interview</div>
+    </div>
+    <div class="sum-card" onclick="filterByStatus('selected')">
+      <div class="dot selected"></div>
+      <div class="sum-num" id="cnt-selected">0</div>
+      <div class="sum-lbl">Selected</div>
+    </div>
+    <div class="sum-card" onclick="filterByStatus('rejected')">
+      <div class="dot rejected"></div>
+      <div class="sum-num" id="cnt-rejected">0</div>
+      <div class="sum-lbl">Rejected</div>
+    </div>
+  </div>
+
+  <!-- SEARCH + FILTER -->
+  <div class="search-row">
+    <div class="search-box">
+      <i class="ti ti-search"></i>
+      <input type="text" id="searchInput" placeholder="Search company or role…" oninput="renderCards()">
+    </div>
+    <button class="filter-btn" onclick="showToast('Sort by date, status, or stipend')">
+      <i class="ti ti-adjustments-horizontal"></i>
+    </button>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-tabs" id="filterTabs">
+    <button class="ftab active" onclick="setTab(this,'all')">All</button>
+    <button class="ftab" onclick="setTab(this,'applied')">Applied</button>
+    <button class="ftab" onclick="setTab(this,'interview')">Interview</button>
+    <button class="ftab" onclick="setTab(this,'selected')">Selected</button>
+    <button class="ftab" onclick="setTab(this,'rejected')">Rejected</button>
+    <button class="ftab" onclick="setTab(this,'offer')">Offer</button>
+  </div>
+
+  <!-- APP LIST -->
+  <div class="app-list" id="appList"></div>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon"><i class="ti ti-clipboard-list"></i></div>
+    <h3>No applications yet</h3>
+    <p>Tap the + button to add your first application</p>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-item" onclick="window.location.href='dashboard.html'">
+    <i class="ti ti-home"></i> Home
+  </button>
+  <button class="nav-item" onclick="window.location.href='internships.html'">
+    <i class="ti ti-briefcase"></i> Jobs
+  </button>
+  <button class="nav-item active">
+    <i class="ti ti-clipboard-list"></i> Tracker
+  </button>
+  <button class="nav-item" onclick="window.location.href='skills.html'">
+    <i class="ti ti-star"></i> Skills
+  </button>
+  <button class="nav-item" onclick="window.location.href='profile.html'">
+    <i class="ti ti-user"></i> Profile
+  </button>
+</div>
+
+<!-- ADD APPLICATION MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <h3 id="modalTitle">Add Application</h3>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Company Name</label>
+        <input type="text" id="f-company" placeholder="e.g. Google">
+      </div>
+      <div class="form-field">
+        <label>Role</label>
+        <input type="text" id="f-role" placeholder="e.g. SWE Intern">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Location</label>
+        <input type="text" id="f-location" placeholder="e.g. Bangalore">
+      </div>
+      <div class="form-field">
+        <label>Stipend</label>
+        <input type="text" id="f-stipend" placeholder="e.g. ₹20,000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="applied">Applied</option>
+          <option value="interview">Interview</option>
+          <option value="selected">Selected</option>
+          <option value="offer">Offer</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Date Applied</label>
+        <input type="date" id="f-date">
+      </div>
+    </div>
+    <button class="modal-save-btn" onclick="saveApplication()">
+      <i class="ti ti-check" style="margin-right:6px; vertical-align:-2px;"></i> Save Application
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const EMOJIS = {
+    Google:'🔵', Microsoft:'🪟', Amazon:'🟠', Spotify:'🟢',
+    Meta:'🔴', Apple:'🍎', Netflix:'🎬', Flipkart:'🛒',
+    Infosys:'🔷', Wipro:'⚪', TCS:'🟣', default:'🏢'
+  };
+
+  const SAMPLE = [
+    { id:1, company:'Google',    role:'SWE Intern',      location:'Hyderabad', stipend:'₹40,000', status:'interview', date:'2026-05-10' },
+    { id:2, company:'Amazon',    role:'Data Intern',     location:'Bangalore', stipend:'₹35,000', status:'applied',   date:'2026-05-07' },
+    { id:3, company:'Spotify',   role:'Design Intern',   location:'Remote',    stipend:'₹30,000', status:'selected',  date:'2026-04-30' },
+    { id:4, company:'Meta',      role:'ML Intern',       location:'Mumbai',    stipend:'₹45,000', status:'rejected',  date:'2026-04-20' },
+    { id:5, company:'Microsoft', role:'Cloud Intern',    location:'Bangalore', stipend:'₹25,000', status:'applied',   date:'2026-05-15' },
+  ];
+
+  let apps        = JSON.parse(localStorage.getItem('internhub_apps') || 'null') || SAMPLE;
+  let activeTab   = 'all';
+  let editId      = null;
+
+  function save() { localStorage.setItem('internhub_apps', JSON.stringify(apps)); }
+
+  function getLogo(company) {
+    return EMOJIS[company] || EMOJIS.default;
+  }
+
+  function daysAgo(d) {
+    const diff = Math.floor((Date.now() - new Date(d)) / 86400000);
+    if (diff === 0) return 'Today';
+    if (diff === 1) return 'Yesterday';
+    return diff + ' days ago';
+  }
+
+  function updateCounts() {
+    document.getElementById('cnt-all').textContent       = apps.length;
+    document.getElementById('cnt-interview').textContent = apps.filter(a => a.status === 'interview').length;
+    document.getElementById('cnt-selected').textContent  = apps.filter(a => a.status === 'selected').length;
+    document.getElementById('cnt-rejected').textContent  = apps.filter(a => a.status === 'rejected').length;
+  }
+
+  function renderCards() {
+    const query   = document.getElementById('searchInput').value.toLowerCase();
+    let filtered  = apps.filter(a => {
+      const matchTab    = activeTab === 'all' || a.status === activeTab;
+      const matchSearch = !query || a.company.toLowerCase().includes(query) || a.role.toLowerCase().includes(query);
+      return matchTab && matchSearch;
+    });
+
+    const list  = document.getElementById('appList');
+    const empty = document.getElementById('emptyState');
+
+    if (filtered.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+    list.innerHTML = filtered.map(a => `
+      <div class="app-card" id="card-${a.id}">
+        <div class="app-card-top">
+          <div class="co-logo">${getLogo(a.company)}</div>
+          <div class="app-meta">
+            <h4>${a.company} – ${a.role}</h4>
+            <p>${daysAgo(a.date)}</p>
+          </div>
+          <span class="badge ${a.status}">${statusLabel(a.status)}</span>
+        </div>
+        <div class="app-card-footer">
+          <div class="footer-chips">
+            ${a.location ? `<span class="fchip"><i class="ti ti-map-pin"></i>${a.location}</span>` : ''}
+            ${a.stipend  ? `<span class="fchip"><i class="ti ti-currency-rupee"></i>${a.stipend.replace('₹','')}</span>` : ''}
+          </div>
+          <div class="action-row">
+            <button class="icon-btn" onclick="editApp(${a.id})" title="Edit"><i class="ti ti-edit"></i></button>
+            <button class="icon-btn danger" onclick="deleteApp(${a.id})" title="Delete"><i class="ti ti-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    updateCounts();
+  }
+
+  function statusLabel(s) {
+    return { applied:'Applied', interview:'Interview 📅', selected:'Selected ✓', rejected:'Rejected', offer:'Offer 🎉' }[s] || s;
+  }
+
+  function setTab(el, status) {
+    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    activeTab = status;
+    renderCards();
+  }
+
+  function filterByStatus(status) {
+    activeTab = status;
+    document.querySelectorAll('.ftab').forEach(t => {
+      t.classList.toggle('active', t.textContent.toLowerCase().startsWith(status) || (status === 'all' && t.textContent === 'All'));
+    });
+    renderCards();
+  }
+
+  /* ── MODAL ── */
+  function openModal(id = null) {
+    editId = id;
+    document.getElementById('modalTitle').textContent = id ? 'Edit Application' : 'Add Application';
+    if (id) {
+      const a = apps.find(x => x.id === id);
+      document.getElementById('f-company').value  = a.company;
+      document.getElementById('f-role').value     = a.role;
+      document.getElementById('f-location').value = a.location;
+      document.getElementById('f-stipend').value  = a.stipend;
+      document.getElementById('f-status').value   = a.status;
+      document.getElementById('f-date').value     = a.date;
+    } else {
+      ['f-company','f-role','f-location','f-stipend'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('f-status').value = 'applied';
+      document.getElementById('f-date').value   = new Date().toISOString().split('T')[0];
+    }
+    document.getElementById('modalOverlay').classList.add('show');
+  }
+
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+  function closeModalOutside(e) { if (e.target.id === 'modalOverlay') closeModal(); }
+
+  function saveApplication() {
+    const company  = document.getElementById('f-company').value.trim();
+    const role     = document.getElementById('f-role').value.trim();
+    const location = document.getElementById('f-location').value.trim();
+    const stipend  = document.getElementById('f-stipend').value.trim();
+    const status   = document.getElementById('f-status').value;
+    const date     = document.getElementById('f-date').value;
+
+    if (!company || !role) { showToast('Company and role are required'); return; }
+
+    if (editId) {
+      const idx = apps.findIndex(a => a.id === editId);
+      apps[idx] = { ...apps[idx], company, role, location, stipend, status, date };
+      showToast('Application updated ✓');
+    } else {
+      apps.unshift({ id: Date.now(), company, role, location, stipend, status, date });
+      showToast('Application added 🎉');
+    }
+
+    save();
+    closeModal();
+    renderCards();
+  }
+
+  function editApp(id)   { openModal(id); }
+
+  function deleteApp(id) {
+    if (!confirm('Delete this application?')) return;
+    apps = apps.filter(a => a.id !== id);
+    save();
+    renderCards();
+    showToast('Application removed');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  renderCards();
+</script>
+
+</body>
+</html>

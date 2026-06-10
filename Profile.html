@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile – InternHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0eff8;
+    min-height: 100vh;
+    padding-bottom: 90px;
+    color: #1a1a2e;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: #fff;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ece9f8;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #534AB7;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-icon i { font-size: 18px; color: #EEEDFE; }
+  .topbar h1 { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+
+  .settings-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #534AB7;
+    transition: background 0.15s;
+  }
+
+  .settings-btn:hover { background: #f4f3fb; }
+  .settings-btn i { font-size: 20px; }
+
+  /* ── MAIN ── */
+  .main { padding: 1.25rem; max-width: 480px; margin: 0 auto; }
+
+  /* ── HERO CARD ── */
+  .hero-card {
+    background: linear-gradient(135deg, #534AB7 0%, #7F77DD 100%);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+  }
+
+  .hero-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .edit-hero-btn {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.18);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    transition: background 0.15s;
+    z-index: 1;
+  }
+
+  .edit-hero-btn:hover { background: rgba(255,255,255,0.28); }
+  .edit-hero-btn i { font-size: 16px; }
+
+  .avatar-wrap {
+    position: relative;
+    width: 84px;
+    margin: 0 auto 12px;
+  }
+
+  .avatar {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.5);
+    object-fit: cover;
+    background: #EEEDFE;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #534AB7;
+    overflow: hidden;
+  }
+
+  .avatar-cam {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #534AB7;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+
+  .avatar-cam i { font-size: 13px; color: #534AB7; }
+
+  .hero-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+  .hero-card .role { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
+  .hero-card .email { font-size: 12px; opacity: 0.7; margin-bottom: 14px; }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .hstat {
+    flex: 1;
+    padding: 10px 8px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .hstat:last-child { border-right: none; }
+  .hstat-num { font-size: 18px; font-weight: 700; line-height: 1; }
+  .hstat-lbl { font-size: 10px; opacity: 0.75; margin-top: 2px; }
+
+  /* ── COMPLETION CARD ── */
+  .completion-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    border: 1.5px solid #ece9f8;
+    margin-bottom: 1rem;
+  }
+
+  .comp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .comp-header h3 { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .comp-pct { font-size: 14px; font-weight: 700; color: #534AB7; }
+
+  .comp-bar-wrap {
+    height: 7px;
+    background: #f0eff8;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .comp-bar-fill {
+    height: 100%;
+    background: #534AB7;
+    border-radius: 4px;
+    width: 60%;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  .comp-items { display: flex; flex-direction: column; gap: 6px; }
+
+  .comp-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #555;
+  }
+
+  .comp-item i { font-size: 15px; }
+  .comp-item i.done { color: #639922; }
+  .comp-item i.todo { color: #ccc; }
+
+  /* ── INFO CARD ── */
+  .info-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    border: 1.5px solid #ece9f8;
+    margin-bottom: 1rem;
+  }
+
+  .info-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .info-card-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a2e;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .info-card-header h3 i { font-size: 17px; color: #534AB7; }
+
+  .edit-link {
+    font-size: 12px;
+    color: #534AB7;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .edit-link i { font-size: 13px; }
+
+  .info-rows { display: flex; flex-direction: column; gap: 10px; }
+
+  .info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .info-row-icon {
+    width: 32px; height: 32px;
+    border-radius: 9px;
+    background: #f4f3fb;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .info-row-icon i { font-size: 15px; color: #534AB7; }
+
+  .info-row-body { flex: 1; }
+  .info-row-body .lbl { font-size: 11px; color: #aaa; font-weight: 500; }
+  .info-row-body .val { font-size: 13px; color: #1a1a2e; font-weight: 600; margin-top: 1px; }
+
+  /* ── RESUME CARD ── */
+  .resume-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    border: 1.5px solid #ece9f8;
+    margin-bottom: 1rem;
+  }
+
+  .resume-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a2e;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 1rem;
+  }
+
+  .resume-card h3 i { font-size: 17px; color: #534AB7; }
+
+  .resume-box {
+    border: 2px dashed #ece9f8;
+    border-radius: 14px;
+    padding: 1.25rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    margin-bottom: 10px;
+  }
+
+  .resume-box:hover { border-color: #534AB7; background: #faf9ff; }
+
+  .resume-box i { font-size: 32px; color: #c5c2e8; margin-bottom: 8px; display: block; }
+  .resume-box p { font-size: 13px; color: #888; font-weight: 500; }
+  .resume-box span { font-size: 11px; color: #bbb; }
+
+  .resume-uploaded {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #EAF3DE;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  .resume-uploaded i { font-size: 22px; color: #3B6D11; }
+  .resume-uploaded .rname { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+  .resume-uploaded .rsize { font-size: 11px; color: #888; margin-top: 2px; }
+  .resume-uploaded .rdel  { margin-left: auto; color: #E24B4A; cursor: pointer; font-size: 18px; }
+
+  .upload-btn {
+    width: 100%;
+    padding: 11px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border: 1.5px solid #534AB7;
+    border-radius: 10px;
+    background: #EEEDFE;
+    color: #534AB7;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    gap: 7px;
+    transition: background 0.15s;
+  }
+
+  .upload-btn:hover { background: #dddaf8; }
+
+  /* ── ACHIEVEMENTS ── */
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .ach-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 0.9rem 0.5rem;
+    border: 1.5px solid #ece9f8;
+    text-align: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+  }
+
+  .ach-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(83,74,183,0.10);
+  }
+
+  .ach-card.locked { opacity: 0.45; }
+
+  .ach-icon { font-size: 26px; margin-bottom: 5px; }
+  .ach-name { font-size: 11px; font-weight: 700; color: #1a1a2e; }
+  .ach-desc { font-size: 10px; color: #aaa; margin-top: 2px; }
+
+  /* ── MENU LIST ── */
+  .menu-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1.5px solid #ece9f8;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid #f4f3fb;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item:hover { background: #faf9ff; }
+
+  .menu-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .menu-icon i { font-size: 18px; }
+  .menu-icon.purple { background: #EEEDFE; } .menu-icon.purple i { color: #534AB7; }
+  .menu-icon.green  { background: #EAF3DE; } .menu-icon.green i  { color: #3B6D11; }
+  .menu-icon.amber  { background: #FAEEDA; } .menu-icon.amber i  { color: #BA7517; }
+  .menu-icon.red    { background: #FCEBEB; } .menu-icon.red i    { color: #E24B4A; }
+  .menu-icon.blue   { background: #E2F0FC; } .menu-icon.blue i   { color: #1A6BA8; }
+
+  .menu-text { flex: 1; }
+  .menu-text h4 { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+  .menu-text p  { font-size: 11px; color: #aaa; margin-top: 1px; }
+  .menu-arrow   { font-size: 18px; color: #ccc; }
+
+  /* ── LOGOUT BTN ── */
+  .logout-btn {
+    width: 100%;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: 1.5px solid #FCEBEB;
+    border-radius: 12px;
+    background: #fff;
+    color: #E24B4A;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+    transition: background 0.15s;
+    margin-bottom: 1rem;
+  }
+
+  .logout-btn:hover { background: #FCEBEB; }
+  .logout-btn i { font-size: 18px; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid #ece9f8;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 14px;
+    z-index: 50;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    color: #bbb;
+    font-size: 10px;
+    font-weight: 500;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    padding: 0 12px;
+    transition: color 0.15s;
+  }
+
+  .nav-item i { font-size: 22px; }
+  .nav-item.active { color: #534AB7; }
+  .nav-item:hover  { color: #534AB7; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,26,46,0.5);
+    z-index: 100;
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    padding: 1.5rem 1.25rem 2rem;
+    width: 100%; max-width: 480px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-overlay.show .modal { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: #ece9f8;
+    border-radius: 2px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: #1a1a2e; }
+
+  .form-field { margin-bottom: 0.9rem; }
+
+  .form-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    border: 1.5px solid #e8e6f5;
+    border-radius: 10px;
+    background: #fafafa;
+    color: #1a1a2e;
+    outline: none;
+    transition: border 0.2s;
+    resize: none;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus { border-color: #534AB7; background: #fff; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .modal-save-btn {
+    width: 100%;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 12px;
+    background: #534AB7;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.15s;
+  }
+
+  .modal-save-btn:hover { background: #3C3489; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 90px; left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: #1a1a2e;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 99px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    z-index: 200;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-icon"><i class="ti ti-school"></i></div>
+    <h1>Profile</h1>
+  </div>
+  <button class="settings-btn" onclick="showToast('Settings coming soon')" aria-label="Settings">
+    <i class="ti ti-settings"></i>
+  </button>
+</div>
+
+<div class="main">
+
+  <!-- HERO CARD -->
+  <div class="hero-card">
+    <button class="edit-hero-btn" onclick="openEditModal()"><i class="ti ti-edit"></i></button>
+    <div class="avatar-wrap">
+      <div class="avatar" id="avatarEl">CB</div>
+      <div class="avatar-cam" onclick="showToast('Photo upload coming soon')">
+        <i class="ti ti-camera"></i>
+      </div>
+    </div>
+    <h2 id="heroName">Chithra B</h2>
+    <div class="role" id="heroRole">Full Stack Developer</div>
+    <div class="email" id="heroEmail">chithra@gmail.com</div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-num" id="statApplied">5</div>
+        <div class="hstat-lbl">Applied</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num" id="statInterview">2</div>
+        <div class="hstat-lbl">Interviews</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num" id="statSkills">6</div>
+        <div class="hstat-lbl">Skills</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">7</div>
+        <div class="hstat-lbl">Level</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE COMPLETION -->
+  <div class="completion-card">
+    <div class="comp-header">
+      <h3>Profile Completion</h3>
+      <span class="comp-pct" id="compPct">60%</span>
+    </div>
+    <div class="comp-bar-wrap">
+      <div class="comp-bar-fill" id="compBar"></div>
+    </div>
+    <div class="comp-items">
+      <div class="comp-item"><i class="ti ti-circle-check done"></i> Basic info added</div>
+      <div class="comp-item"><i class="ti ti-circle-check done"></i> Skills updated</div>
+      <div class="comp-item"><i class="ti ti-circle-check done"></i> At least 1 application</div>
+      <div class="comp-item"><i class="ti ti-circle todo"></i> Resume uploaded</div>
+      <div class="comp-item"><i class="ti ti-circle todo"></i> LinkedIn profile linked</div>
+    </div>
+  </div>
+
+  <!-- PERSONAL INFO -->
+  <div class="info-card">
+    <div class="info-card-header">
+      <h3><i class="ti ti-user"></i> Personal Info</h3>
+      <button class="edit-link" onclick="openEditModal()"><i class="ti ti-edit"></i> Edit</button>
+    </div>
+    <div class="info-rows">
+      <div class="info-row">
+        <div class="info-row-icon"><i class="ti ti-id-badge"></i></div>
+        <div class="info-row-body">
+          <div class="lbl">Full Name</div>
+          <div class="val" id="infoName">Chithra B</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-row-icon"><i class="ti ti-mail"></i></div>
+        <div class="info-row-body">
+          <div class="lbl">Email</div>
+          <div class="val" id="infoEmail">chithra@gmail.com</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-row-icon"><i class="ti ti-phone"></i></div>
+        <div class="info-row-body">
+          <div class="lbl">Phone</div>
+          <div class="val" id="infoPhone">+91 98765 43210</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-row-icon"><i class="ti ti-map-pin"></i></div>
+        <div class="info-row-body">
+          <div class="lbl">Location</div>
+          <div class="val" id="infoLocation">Chennai, Tamil Nadu</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-row-icon"><i class="ti ti-school"></i></div>
+        <div class="info-row-body">
+          <div class="lbl">College</div>
+          <div class="val" id="infoCollege">Anna University, B.Tech CSE</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-row-icon"><i class="ti ti-calendar"></i></div>
+        <div class="info-row-body">
+          <div class="lbl">Graduation Year</div>
+          <div class="val" id="infoGrad">2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUME -->
+  <div class="resume-card">
+    <h3><i class="ti ti-file-cv"></i> Resume</h3>
+    <div id="resumeEmpty">
+      <div class="resume-box" onclick="showToast('Select a PDF to upload')">
+        <i class="ti ti-cloud-upload"></i>
+        <p>Tap to upload resume</p>
+        <span>PDF, DOC up to 5MB</span>
+      </div>
+      <button class="upload-btn" onclick="uploadResume()">
+        <i class="ti ti-upload"></i> Upload Resume
+      </button>
+    </div>
+    <div id="resumeUploaded" style="display:none">
+      <div class="resume-uploaded">
+        <i class="ti ti-file-type-pdf"></i>
+        <div>
+          <div class="rname">Chithra_Resume.pdf</div>
+          <div class="rsize">245 KB · Uploaded today</div>
+        </div>
+        <i class="ti ti-x rdel" onclick="removeResume()"></i>
+      </div>
+      <button class="upload-btn" onclick="showToast('Opening resume…')">
+        <i class="ti ti-eye"></i> View Resume
+      </button>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS -->
+  <div class="info-card">
+    <div class="info-card-header">
+      <h3><i class="ti ti-trophy"></i> Achievements</h3>
+    </div>
+    <div class="achievements-grid">
+      <div class="ach-card" onclick="showToast('First Apply: Sent your first application!')">
+        <div class="ach-icon">🚀</div>
+        <div class="ach-name">First Apply</div>
+        <div class="ach-desc">Sent 1st app</div>
+      </div>
+      <div class="ach-card" onclick="showToast('Interview Ready: Got your first interview!')">
+        <div class="ach-icon">🎯</div>
+        <div class="ach-name">Interview</div>
+        <div class="ach-desc">First call</div>
+      </div>
+      <div class="ach-card" onclick="showToast('Skill Builder: Added 5+ skills!')">
+        <div class="ach-icon">⭐</div>
+        <div class="ach-name">Skill Builder</div>
+        <div class="ach-desc">5+ skills</div>
+      </div>
+      <div class="ach-card locked" onclick="showToast('Locked: Get selected to unlock!')">
+        <div class="ach-icon">🏆</div>
+        <div class="ach-name">Selected!</div>
+        <div class="ach-desc">Get an offer</div>
+      </div>
+      <div class="ach-card locked" onclick="showToast('Locked: Upload resume to unlock!')">
+        <div class="ach-icon">📄</div>
+        <div class="ach-name">Resume Up</div>
+        <div class="ach-desc">Upload CV</div>
+      </div>
+      <div class="ach-card locked" onclick="showToast('Locked: Apply to 10 jobs to unlock!')">
+        <div class="ach-icon">💼</div>
+        <div class="ach-name">10 Apps</div>
+        <div class="ach-desc">Stay busy</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="menu-card">
+    <div class="menu-item" onclick="showToast('Opening notifications…')">
+      <div class="menu-icon purple"><i class="ti ti-bell"></i></div>
+      <div class="menu-text"><h4>Notifications</h4><p>Manage alerts & reminders</p></div>
+      <i class="ti ti-chevron-right menu-arrow"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('Opening privacy settings…')">
+      <div class="menu-icon blue"><i class="ti ti-shield-check"></i></div>
+      <div class="menu-text"><h4>Privacy & Security</h4><p>Password, data & permissions</p></div>
+      <i class="ti ti-chevron-right menu-arrow"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('Opening linked accounts…')">
+      <div class="menu-icon green"><i class="ti ti-brand-linkedin"></i></div>
+      <div class="menu-text"><h4>Linked Accounts</h4><p>LinkedIn, GitHub, Google</p></div>
+      <i class="ti ti-chevron-right menu-arrow"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('Opening help center…')">
+      <div class="menu-icon amber"><i class="ti ti-help-circle"></i></div>
+      <div class="menu-text"><h4>Help & Support</h4><p>FAQs, contact us</p></div>
+      <i class="ti ti-chevron-right menu-arrow"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('Opening about page…')">
+      <div class="menu-icon purple"><i class="ti ti-info-circle"></i></div>
+      <div class="menu-text"><h4>About InternHub</h4><p>Version 1.0.0</p></div>
+      <i class="ti ti-chevron-right menu-arrow"></i>
+    </div>
+  </div>
+
+  <!-- LOGOUT -->
+  <button class="logout-btn" onclick="confirmLogout()">
+    <i class="ti ti-logout"></i> Log Out
+  </button>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-item" onclick="window.location.href='dashboard.html'">
+    <i class="ti ti-home"></i> Home
+  </button>
+  <button class="nav-item" onclick="window.location.href='internships.html'">
+    <i class="ti ti-briefcase"></i> Jobs
+  </button>
+  <button class="nav-item" onclick="window.location.href='tracker.html'">
+    <i class="ti ti-clipboard-list"></i> Tracker
+  </button>
+  <button class="nav-item" onclick="window.location.href='skills.html'">
+    <i class="ti ti-star"></i> Skills
+  </button>
+  <button class="nav-item active">
+    <i class="ti ti-user"></i> Profile
+  </button>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>Edit Profile</h3>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Full Name</label>
+        <input type="text" id="f-name" placeholder="Your name">
+      </div>
+      <div class="form-field">
+        <label>Role / Title</label>
+        <input type="text" id="f-role" placeholder="e.g. Full Stack Dev">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="you@email.com">
+      </div>
+      <div class="form-field">
+        <label>Phone</label>
+        <input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Location</label>
+        <input type="text" id="f-location" placeholder="City, State">
+      </div>
+      <div class="form-field">
+        <label>Graduation Year</label>
+        <input type="text" id="f-grad" placeholder="e.g. 2026">
+      </div>
+    </div>
+    <div class="form-field">
+      <label>College & Degree</label>
+      <input type="text" id="f-college" placeholder="e.g. Anna University, B.Tech CSE">
+    </div>
+    <div class="form-field">
+      <label>Bio (optional)</label>
+      <textarea id="f-bio" rows="3" placeholder="A short intro about yourself…"></textarea>
+    </div>
+    <button class="modal-save-btn" onclick="saveProfile()">
+      <i class="ti ti-check" style="margin-right:6px; vertical-align:-2px;"></i> Save Changes
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── PROFILE DATA ── */
+  const DEFAULT = {
+    name: 'Chithra B', role: 'Full Stack Developer',
+    email: 'chithra@gmail.com', phone: '+91 98765 43210',
+    location: 'Chennai, Tamil Nadu', college: 'Anna University, B.Tech CSE',
+    grad: '2026', bio: ''
+  };
+
+  let profile = JSON.parse(localStorage.getItem('internhub_profile') || 'null') || DEFAULT;
+
+  function initials(name) {
+    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  }
+
+  function applyProfile() {
+    document.getElementById('heroName').textContent   = profile.name;
+    document.getElementById('heroRole').textContent   = profile.role;
+    document.getElementById('heroEmail').textContent  = profile.email;
+    document.getElementById('avatarEl').textContent   = initials(profile.name);
+    document.getElementById('infoName').textContent   = profile.name;
+    document.getElementById('infoEmail').textContent  = profile.email;
+    document.getElementById('infoPhone').textContent  = profile.phone;
+    document.getElementById('infoLocation').textContent = profile.location;
+    document.getElementById('infoCollege').textContent  = profile.college;
+    document.getElementById('infoGrad').textContent     = profile.grad;
+
+    // sync stats from localStorage
+    const apps   = JSON.parse(localStorage.getItem('internhub_apps')   || '[]');
+    const skills = JSON.parse(localStorage.getItem('internhub_skills') || '[]');
+    document.getElementById('statApplied').textContent   = apps.length;
+    document.getElementById('statInterview').textContent = apps.filter(a => a.status === 'interview').length;
+    document.getElementById('statSkills').textContent    = skills.length;
+  }
+
+  /* ── MODAL ── */
+  function openEditModal() {
+    document.getElementById('f-name').value     = profile.name;
+    document.getElementById('f-role').value     = profile.role;
+    document.getElementById('f-email').value    = profile.email;
+    document.getElementById('f-phone').value    = profile.phone;
+    document.getElementById('f-location').value = profile.location;
+    document.getElementById('f-college').value  = profile.college;
+    document.getElementById('f-grad').value     = profile.grad;
+    document.getElementById('f-bio').value      = profile.bio || '';
+    document.getElementById('modalOverlay').classList.add('show');
+  }
+
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+  function closeModalOutside(e) { if (e.target.id === 'modalOverlay') closeModal(); }
+
+  function saveProfile() {
+    const name = document.getElementById('f-name').value.trim();
+    if (!name) { showToast('Name is required'); return; }
+    profile = {
+      name,
+      role:     document.getElementById('f-role').value.trim()     || profile.role,
+      email:    document.getElementById('f-email').value.trim()    || profile.email,
+      phone:    document.getElementById('f-phone').value.trim()    || profile.phone,
+      location: document.getElementById('f-location').value.trim() || profile.location,
+      college:  document.getElementById('f-college').value.trim()  || profile.college,
+      grad:     document.getElementById('f-grad').value.trim()     || profile.grad,
+      bio:      document.getElementById('f-bio').value.trim()
+    };
+    localStorage.setItem('internhub_profile', JSON.stringify(profile));
+    applyProfile();
+    closeModal();
+    showToast('Profile updated ✓');
+  }
+
+  /* ── RESUME ── */
+  function uploadResume() {
+    document.getElementById('resumeEmpty').style.display    = 'none';
+    document.getElementById('resumeUploaded').style.display = '';
+    showToast('Resume uploaded successfully ✓');
+
+    // mark resume item done
+    const items = document.querySelectorAll('.comp-item');
+    items[3].innerHTML = '<i class="ti ti-circle-check done"></i> Resume uploaded';
+    document.getElementById('compPct').textContent = '80%';
+    document.getElementById('compBar').style.width = '80%';
+  }
+
+  function removeResume() {
+    document.getElementById('resumeEmpty').style.display    = '';
+    document.getElementById('resumeUploaded').style.display = 'none';
+    showToast('Resume removed');
+    const items = document.querySelectorAll('.comp-item');
+    items[3].innerHTML = '<i class="ti ti-circle todo"></i> Resume uploaded';
+    document.getElementById('compPct').textContent = '60%';
+    document.getElementById('compBar').style.width = '60%';
+  }
+
+  /* ── LOGOUT ── */
+  function confirmLogout() {
+    if (confirm('Are you sure you want to log out?')) {
+      showToast('Logging out…');
+      setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+    }
+  }
+
+  /* ── TOAST ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  applyProfile();
+</script>
+
+</body>
+</html>

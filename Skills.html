@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills – InternHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0eff8;
+    min-height: 100vh;
+    padding-bottom: 90px;
+    color: #1a1a2e;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: #fff;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ece9f8;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #534AB7;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-icon i { font-size: 18px; color: #EEEDFE; }
+  .topbar h1 { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+
+  .add-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #534AB7;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    transition: background 0.15s;
+  }
+
+  .add-btn:hover { background: #3C3489; }
+  .add-btn i { font-size: 20px; }
+
+  /* ── MAIN ── */
+  .main { padding: 1.25rem; max-width: 480px; margin: 0 auto; }
+
+  /* ── XP BANNER ── */
+  .xp-banner {
+    background: linear-gradient(135deg, #534AB7 0%, #7F77DD 100%);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .xp-avatar {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .xp-avatar i { font-size: 28px; color: #fff; }
+
+  .xp-info { flex: 1; }
+  .xp-info h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .xp-info p  { font-size: 11px; opacity: 0.8; margin-bottom: 8px; }
+
+  .xp-bar-wrap { height: 6px; background: rgba(255,255,255,0.25); border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+  .xp-bar-fill { height: 100%; background: #fff; border-radius: 3px; width: 72%; }
+  .xp-bar-lbl  { font-size: 10px; opacity: 0.75; }
+
+  .xp-badge {
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .xp-badge .lvl { font-size: 28px; font-weight: 700; line-height: 1; }
+  .xp-badge .lvl-lbl { font-size: 10px; opacity: 0.75; }
+
+  /* ── SUMMARY GRID ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  .sum-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 0.9rem 0.75rem;
+    text-align: center;
+    border: 1.5px solid #ece9f8;
+  }
+
+  .sum-icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 6px;
+  }
+
+  .sum-icon i { font-size: 17px; }
+  .sum-icon.purple { background: #EEEDFE; } .sum-icon.purple i { color: #534AB7; }
+  .sum-icon.green  { background: #EAF3DE; } .sum-icon.green i  { color: #3B6D11; }
+  .sum-icon.amber  { background: #FAEEDA; } .sum-icon.amber i  { color: #BA7517; }
+
+  .sum-num { font-size: 20px; font-weight: 700; color: #1a1a2e; line-height: 1; }
+  .sum-lbl { font-size: 10px; color: #aaa; font-weight: 500; margin-top: 3px; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header h3 { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+
+  .sort-btn {
+    font-size: 12px;
+    color: #534AB7;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sort-btn i { font-size: 14px; }
+
+  /* ── CATEGORY TABS ── */
+  .cat-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 1rem;
+    scrollbar-width: none;
+  }
+
+  .cat-tabs::-webkit-scrollbar { display: none; }
+
+  .ctab {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 99px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ctab.active { background: #534AB7; color: #fff; border-color: #534AB7; }
+  .ctab:hover:not(.active) { background: #f4f3fb; color: #534AB7; }
+
+  /* ── SKILL CARDS ── */
+  .skills-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.25rem; }
+
+  .skill-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1rem;
+    border: 1.5px solid #ece9f8;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+
+  .skill-card:hover {
+    box-shadow: 0 4px 16px rgba(83,74,183,0.10);
+    transform: translateY(-1px);
+  }
+
+  .skill-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .skill-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    border: 1.5px solid #ece9f8;
+    background: #f9f9ff;
+  }
+
+  .skill-info { flex: 1; min-width: 0; }
+  .skill-info h4 { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+
+  .skill-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+    flex-wrap: wrap;
+  }
+
+  .cat-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 99px;
+  }
+
+  .cat-tag.programming { background: #EEEDFE; color: #3C3489; }
+  .cat-tag.web         { background: #E1F5EE; color: #0F6E56; }
+  .cat-tag.database    { background: #FAEEDA; color: #854F0B; }
+  .cat-tag.design      { background: #FAECE7; color: #993C1D; }
+  .cat-tag.tools       { background: #EAF3DE; color: #3B6D11; }
+  .cat-tag.soft        { background: #FBEAF0; color: #993556; }
+
+  .lvl-tag {
+    font-size: 10px;
+    color: #aaa;
+    font-weight: 500;
+  }
+
+  .skill-pct {
+    font-size: 15px;
+    font-weight: 700;
+    color: #534AB7;
+    flex-shrink: 0;
+  }
+
+  .skill-bar-wrap {
+    height: 7px;
+    background: #f0eff8;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .skill-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: #534AB7;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  .skill-bar-fill.high   { background: #639922; }
+  .skill-bar-fill.mid    { background: #534AB7; }
+  .skill-bar-fill.low    { background: #EF9F27; }
+
+  .skill-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cert-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #3B6D11;
+    background: #EAF3DE;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  .cert-chip i { font-size: 12px; }
+
+  .no-cert {
+    font-size: 11px;
+    color: #ccc;
+  }
+
+  .skill-actions { display: flex; gap: 6px; }
+
+  .icon-btn {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    border: 1px solid #ece9f8;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #aaa;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .icon-btn:hover { color: #534AB7; background: #f4f3fb; }
+  .icon-btn.danger:hover { color: #E24B4A; background: #FCEBEB; }
+  .icon-btn i { font-size: 14px; }
+
+  /* ── SUGGESTED SKILLS ── */
+  .suggested-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+
+  .sug-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 0.9rem 1rem;
+    border: 1.5px solid #ece9f8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+
+  .sug-card:hover { border-color: #534AB7; box-shadow: 0 4px 14px rgba(83,74,183,0.10); }
+
+  .sug-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #EEEDFE;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .sug-info h5 { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+  .sug-info p  { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .sug-add {
+    margin-left: auto;
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: #534AB7;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .sug-add i { font-size: 14px; color: #fff; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    display: none;
+  }
+
+  .empty-icon {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    background: #EEEDFE;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+  }
+
+  .empty-icon i { font-size: 32px; color: #534AB7; }
+  .empty-state h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .empty-state p  { font-size: 13px; color: #888; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid #ece9f8;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 14px;
+    z-index: 50;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    color: #bbb;
+    font-size: 10px;
+    font-weight: 500;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    padding: 0 12px;
+    transition: color 0.15s;
+  }
+
+  .nav-item i { font-size: 22px; }
+  .nav-item.active { color: #534AB7; }
+  .nav-item:hover  { color: #534AB7; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,26,46,0.5);
+    z-index: 100;
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    padding: 1.5rem 1.25rem 2rem;
+    width: 100%; max-width: 480px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  }
+
+  .modal-overlay.show .modal { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: #ece9f8;
+    border-radius: 2px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: #1a1a2e; }
+
+  .form-field { margin-bottom: 0.9rem; }
+
+  .form-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  .form-field input,
+  .form-field select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    border: 1.5px solid #e8e6f5;
+    border-radius: 10px;
+    background: #fafafa;
+    color: #1a1a2e;
+    outline: none;
+    transition: border 0.2s;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus { border-color: #534AB7; background: #fff; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── SLIDER ── */
+  .slider-field label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  .slider-field label span { color: #534AB7; font-weight: 700; }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: #534AB7;
+    height: 4px;
+    cursor: pointer;
+  }
+
+  .modal-save-btn {
+    width: 100%;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 12px;
+    background: #534AB7;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 0.75rem;
+    transition: background 0.15s;
+  }
+
+  .modal-save-btn:hover { background: #3C3489; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 90px; left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: #1a1a2e;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 99px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    z-index: 200;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-icon"><i class="ti ti-school"></i></div>
+    <h1>Skills</h1>
+  </div>
+  <button class="add-btn" onclick="openModal()" aria-label="Add skill">
+    <i class="ti ti-plus"></i>
+  </button>
+</div>
+
+<div class="main">
+
+  <!-- XP BANNER -->
+  <div class="xp-banner">
+    <div class="xp-avatar"><i class="ti ti-bolt"></i></div>
+    <div class="xp-info">
+      <h3>Skill Level: Rising Star ⭐</h3>
+      <p>720 / 1000 XP to reach Expert</p>
+      <div class="xp-bar-wrap"><div class="xp-bar-fill"></div></div>
+      <div class="xp-bar-lbl">72% progress · Keep going!</div>
+    </div>
+    <div class="xp-badge">
+      <div class="lvl">7</div>
+      <div class="lvl-lbl">Level</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-grid">
+    <div class="sum-card">
+      <div class="sum-icon purple"><i class="ti ti-stack-2"></i></div>
+      <div class="sum-num" id="cnt-total">0</div>
+      <div class="sum-lbl">Total Skills</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon green"><i class="ti ti-trending-up"></i></div>
+      <div class="sum-num" id="cnt-strong">0</div>
+      <div class="sum-lbl">Strong (≥70%)</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon amber"><i class="ti ti-certificate"></i></div>
+      <div class="sum-num" id="cnt-cert">0</div>
+      <div class="sum-lbl">Certified</div>
+    </div>
+  </div>
+
+  <!-- CATEGORY TABS -->
+  <div class="section-header">
+    <h3>My Skills</h3>
+    <button class="sort-btn" onclick="toggleSort()">
+      <i class="ti ti-arrows-sort" id="sortIcon"></i> <span id="sortLabel">Sort</span>
+    </button>
+  </div>
+
+  <div class="cat-tabs">
+    <button class="ctab active" onclick="setCat(this,'all')">All</button>
+    <button class="ctab" onclick="setCat(this,'programming')">Programming</button>
+    <button class="ctab" onclick="setCat(this,'web')">Web</button>
+    <button class="ctab" onclick="setCat(this,'database')">Database</button>
+    <button class="ctab" onclick="setCat(this,'design')">Design</button>
+    <button class="ctab" onclick="setCat(this,'tools')">Tools</button>
+    <button class="ctab" onclick="setCat(this,'soft')">Soft Skills</button>
+  </div>
+
+  <!-- SKILLS LIST -->
+  <div class="skills-list" id="skillsList"></div>
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon"><i class="ti ti-sparkles"></i></div>
+    <h3>No skills here yet</h3>
+    <p>Tap + to add your first skill</p>
+  </div>
+
+  <!-- SUGGESTED SKILLS -->
+  <div class="section-header" style="margin-top:1.5rem">
+    <h3>Suggested for You</h3>
+  </div>
+
+  <div class="suggested-grid">
+    <div class="sug-card" onclick="quickAdd('React','web',60)">
+      <div class="sug-icon">⚛️</div>
+      <div class="sug-info"><h5>React</h5><p>Web · In demand</p></div>
+      <div class="sug-add"><i class="ti ti-plus"></i></div>
+    </div>
+    <div class="sug-card" onclick="quickAdd('Python','programming',50)">
+      <div class="sug-icon">🐍</div>
+      <div class="sug-info"><h5>Python</h5><p>Programming · Hot</p></div>
+      <div class="sug-add"><i class="ti ti-plus"></i></div>
+    </div>
+    <div class="sug-card" onclick="quickAdd('Figma','design',40)">
+      <div class="sug-icon">🎨</div>
+      <div class="sug-info"><h5>Figma</h5><p>Design · Popular</p></div>
+      <div class="sug-add"><i class="ti ti-plus"></i></div>
+    </div>
+    <div class="sug-card" onclick="quickAdd('Docker','tools',30)">
+      <div class="sug-icon">🐳</div>
+      <div class="sug-info"><h5>Docker</h5><p>Tools · Rising</p></div>
+      <div class="sug-add"><i class="ti ti-plus"></i></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-item" onclick="window.location.href='dashboard.html'">
+    <i class="ti ti-home"></i> Home
+  </button>
+  <button class="nav-item" onclick="window.location.href='internships.html'">
+    <i class="ti ti-briefcase"></i> Jobs
+  </button>
+  <button class="nav-item" onclick="window.location.href='tracker.html'">
+    <i class="ti ti-clipboard-list"></i> Tracker
+  </button>
+  <button class="nav-item active">
+    <i class="ti ti-star"></i> Skills
+  </button>
+  <button class="nav-item" onclick="window.location.href='profile.html'">
+    <i class="ti ti-user"></i> Profile
+  </button>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="modalTitle">Add Skill</h3>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Skill Name</label>
+        <input type="text" id="f-name" placeholder="e.g. JavaScript">
+      </div>
+      <div class="form-field">
+        <label>Category</label>
+        <select id="f-cat">
+          <option value="programming">Programming</option>
+          <option value="web">Web</option>
+          <option value="database">Database</option>
+          <option value="design">Design</option>
+          <option value="tools">Tools</option>
+          <option value="soft">Soft Skills</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Level</label>
+        <select id="f-level">
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+          <option value="Expert">Expert</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Icon (emoji)</label>
+        <input type="text" id="f-icon" placeholder="e.g. ☕" maxlength="4">
+      </div>
+    </div>
+
+    <div class="form-field slider-field">
+      <label>Proficiency <span id="sliderVal">50%</span></label>
+      <input type="range" id="f-pct" min="0" max="100" step="5" value="50"
+             oninput="document.getElementById('sliderVal').textContent=this.value+'%'">
+    </div>
+
+    <div class="form-field">
+      <label>Certificate (optional)</label>
+      <input type="text" id="f-cert" placeholder="e.g. Oracle Certified Java">
+    </div>
+
+    <button class="modal-save-btn" onclick="saveSkill()">
+      <i class="ti ti-check" style="margin-right:6px; vertical-align:-2px;"></i> Save Skill
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const SAMPLE_SKILLS = [
+    { id:1, name:'Java',       cat:'programming', level:'Intermediate', pct:70, icon:'☕', cert:'Oracle Java SE 11' },
+    { id:2, name:'HTML',       cat:'web',         level:'Advanced',     pct:90, icon:'🌐', cert:'' },
+    { id:3, name:'JavaScript', cat:'web',         level:'Intermediate', pct:60, icon:'🟡', cert:'' },
+    { id:4, name:'SQL',        cat:'database',    level:'Intermediate', pct:65, icon:'🗄️', cert:'MySQL Certified' },
+    { id:5, name:'Git',        cat:'tools',       level:'Intermediate', pct:75, icon:'🔀', cert:'' },
+    { id:6, name:'CSS',        cat:'web',         level:'Advanced',     pct:80, icon:'🎨', cert:'' },
+  ];
+
+  let skills  = JSON.parse(localStorage.getItem('internhub_skills') || 'null') || SAMPLE_SKILLS;
+  let activeCat = 'all';
+  let sortAsc   = false;
+  let editId    = null;
+
+  function saveLS() { localStorage.setItem('internhub_skills', JSON.stringify(skills)); }
+
+  function barClass(p) {
+    if (p >= 75) return 'high';
+    if (p >= 45) return 'mid';
+    return 'low';
+  }
+
+  function updateCounts() {
+    document.getElementById('cnt-total').textContent  = skills.length;
+    document.getElementById('cnt-strong').textContent = skills.filter(s => s.pct >= 70).length;
+    document.getElementById('cnt-cert').textContent   = skills.filter(s => s.cert).length;
+  }
+
+  function render() {
+    let list = skills.filter(s => activeCat === 'all' || s.cat === activeCat);
+    if (sortAsc) list = [...list].sort((a,b) => a.pct - b.pct);
+    else         list = [...list].sort((a,b) => b.pct - a.pct);
+
+    const el    = document.getElementById('skillsList');
+    const empty = document.getElementById('emptyState');
+
+    if (list.length === 0) {
+      el.innerHTML = '';
+      empty.style.display = 'block';
+      updateCounts();
+      return;
+    }
+
+    empty.style.display = 'none';
+    el.innerHTML = list.map(s => `
+      <div class="skill-card">
+        <div class="skill-top">
+          <div class="skill-icon">${s.icon || '💡'}</div>
+          <div class="skill-info">
+            <h4>${s.name}</h4>
+            <div class="skill-meta">
+              <span class="cat-tag ${s.cat}">${capitalize(s.cat)}</span>
+              <span class="lvl-tag">${s.level}</span>
+            </div>
+          </div>
+          <span class="skill-pct">${s.pct}%</span>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-bar-fill ${barClass(s.pct)}" style="width:${s.pct}%"></div>
+        </div>
+        <div class="skill-footer">
+          <div>
+            ${s.cert
+              ? `<span class="cert-chip"><i class="ti ti-certificate"></i>${s.cert}</span>`
+              : `<span class="no-cert">No certificate</span>`
+            }
+          </div>
+          <div class="skill-actions">
+            <button class="icon-btn" onclick="editSkill(${s.id})" title="Edit"><i class="ti ti-edit"></i></button>
+            <button class="icon-btn danger" onclick="deleteSkill(${s.id})" title="Delete"><i class="ti ti-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    updateCounts();
+  }
+
+  function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function setCat(el, cat) {
+    document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    activeCat = cat;
+    render();
+  }
+
+  function toggleSort() {
+    sortAsc = !sortAsc;
+    document.getElementById('sortLabel').textContent = sortAsc ? 'Low→High' : 'High→Low';
+    render();
+  }
+
+  /* ── MODAL ── */
+  function openModal(id = null) {
+    editId = id;
+    document.getElementById('modalTitle').textContent = id ? 'Edit Skill' : 'Add Skill';
+    if (id) {
+      const s = skills.find(x => x.id === id);
+      document.getElementById('f-name').value  = s.name;
+      document.getElementById('f-cat').value   = s.cat;
+      document.getElementById('f-level').value = s.level;
+      document.getElementById('f-icon').value  = s.icon;
+      document.getElementById('f-pct').value   = s.pct;
+      document.getElementById('f-cert').value  = s.cert;
+      document.getElementById('sliderVal').textContent = s.pct + '%';
+    } else {
+      ['f-name','f-icon','f-cert'].forEach(i => document.getElementById(i).value = '');
+      document.getElementById('f-cat').value   = 'programming';
+      document.getElementById('f-level').value = 'Beginner';
+      document.getElementById('f-pct').value   = 50;
+      document.getElementById('sliderVal').textContent = '50%';
+    }
+    document.getElementById('modalOverlay').classList.add('show');
+  }
+
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
+  function closeModalOutside(e) { if (e.target.id === 'modalOverlay') closeModal(); }
+
+  function saveSkill() {
+    const name  = document.getElementById('f-name').value.trim();
+    const cat   = document.getElementById('f-cat').value;
+    const level = document.getElementById('f-level').value;
+    const icon  = document.getElementById('f-icon').value.trim() || '💡';
+    const pct   = parseInt(document.getElementById('f-pct').value);
+    const cert  = document.getElementById('f-cert').value.trim();
+
+    if (!name) { showToast('Please enter a skill name'); return; }
+
+    if (editId) {
+      const idx = skills.findIndex(s => s.id === editId);
+      skills[idx] = { ...skills[idx], name, cat, level, icon, pct, cert };
+      showToast('Skill updated ✓');
+    } else {
+      skills.unshift({ id: Date.now(), name, cat, level, icon, pct, cert });
+      showToast('Skill added 🎉');
+    }
+
+    saveLS();
+    closeModal();
+    render();
+  }
+
+  function editSkill(id)   { openModal(id); }
+
+  function deleteSkill(id) {
+    if (!confirm('Remove this skill?')) return;
+    skills = skills.filter(s => s.id !== id);
+    saveLS();
+    render();
+    showToast('Skill removed');
+  }
+
+  function quickAdd(name, cat, pct) {
+    if (skills.find(s => s.name.toLowerCase() === name.toLowerCase())) {
+      showToast(`${name} is already in your skills`);
+      return;
+    }
+    const icons = { React:'⚛️', Python:'🐍', Figma:'🎨', Docker:'🐳' };
+    skills.unshift({ id: Date.now(), name, cat, level: 'Beginner', icon: icons[name] || '💡', pct, cert: '' });
+    saveLS();
+    render();
+    showToast(`${name} added to your skills 🎉`);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  render();
+</script>
+
+</body>
+</html>

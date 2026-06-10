@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – InternHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0eff8;
+    min-height: 100vh;
+    color: #1a1a2e;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 220px;
+    height: 100vh;
+    background: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    z-index: 60;
+    transition: transform 0.3s;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+  }
+
+  .sidebar-logo .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #534AB7;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .sidebar-logo .logo-icon i { font-size: 18px; color: #EEEDFE; }
+  .sidebar-logo span { font-size: 16px; font-weight: 700; color: #fff; }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #555;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0 0.5rem;
+    margin-bottom: 6px;
+    margin-top: 1rem;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #8888aa;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    border: none;
+    background: none;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-link i { font-size: 18px; }
+  .nav-link:hover  { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-link.active { background: #534AB7; color: #fff; }
+
+  .sidebar-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* ── MAIN AREA ── */
+  .main-wrap {
+    margin-left: 220px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: #fff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ece9f8;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar h2 { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+  .topbar-icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #534AB7;
+    position: relative;
+    transition: background 0.15s;
+  }
+
+  .topbar-icon-btn:hover { background: #f4f3fb; }
+  .topbar-icon-btn i { font-size: 18px; }
+
+  .notif-dot {
+    width: 8px; height: 8px;
+    background: #E24B4A;
+    border-radius: 50%;
+    position: absolute;
+    top: 4px; right: 4px;
+    border: 1.5px solid #fff;
+  }
+
+  .admin-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #534AB7;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #EEEDFE;
+    cursor: pointer;
+  }
+
+  /* ── CONTENT ── */
+  .content { padding: 1.5rem; flex: 1; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .page-header h1 { font-size: 20px; font-weight: 700; color: #1a1a2e; }
+  .page-header p  { font-size: 13px; color: #888; margin-top: 2px; }
+
+  .primary-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 10px;
+    background: #534AB7;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+
+  .primary-btn:hover { background: #3C3489; box-shadow: 0 4px 14px rgba(83,74,183,0.22); }
+  .primary-btn i { font-size: 17px; }
+
+  /* ── STAT CARDS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    border: 1.5px solid #ece9f8;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: box-shadow 0.15s;
+  }
+
+  .stat-card:hover { box-shadow: 0 4px 16px rgba(83,74,183,0.10); }
+
+  .stat-top { display: flex; align-items: center; justify-content: space-between; }
+
+  .stat-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .stat-icon i { font-size: 20px; }
+  .stat-icon.purple { background: #EEEDFE; } .stat-icon.purple i { color: #534AB7; }
+  .stat-icon.green  { background: #EAF3DE; } .stat-icon.green i  { color: #3B6D11; }
+  .stat-icon.amber  { background: #FAEEDA; } .stat-icon.amber i  { color: #BA7517; }
+  .stat-icon.red    { background: #FCEBEB; } .stat-icon.red i    { color: #E24B4A; }
+
+  .stat-trend {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 99px;
+  }
+
+  .stat-trend.up   { background: #EAF3DE; color: #3B6D11; }
+  .stat-trend.down { background: #FCEBEB; color: #A32D2D; }
+
+  .stat-num { font-size: 26px; font-weight: 700; color: #1a1a2e; line-height: 1; }
+  .stat-lbl { font-size: 12px; color: #888; font-weight: 500; }
+
+  /* ── GRID LAYOUT ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+
+  /* ── CARD ── */
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    border: 1.5px solid #ece9f8;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .card-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a2e;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .card-header h3 i { font-size: 17px; color: #534AB7; }
+
+  .card-action {
+    font-size: 12px;
+    color: #534AB7;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0 10px 10px;
+    border-bottom: 1px solid #f4f3fb;
+  }
+
+  tbody tr {
+    transition: background 0.12s;
+    cursor: pointer;
+  }
+
+  tbody tr:hover { background: #faf9ff; }
+
+  tbody td {
+    padding: 11px 10px;
+    border-bottom: 1px solid #f4f3fb;
+    color: #333;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  .co-logo {
+    width: 32px; height: 32px;
+    border-radius: 9px;
+    background: #f4f3fb;
+    border: 1px solid #ece9f8;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .badge.applied   { background: #EEEDFE; color: #3C3489; }
+  .badge.interview { background: #FAEEDA; color: #854F0B; }
+  .badge.selected  { background: #EAF3DE; color: #3B6D11; }
+  .badge.rejected  { background: #FCEBEB; color: #A32D2D; }
+  .badge.active    { background: #EAF3DE; color: #3B6D11; }
+  .badge.inactive  { background: #f4f4f4; color: #888; }
+
+  .tbl-action {
+    background: none;
+    border: 1px solid #ece9f8;
+    border-radius: 7px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    color: #534AB7;
+    transition: background 0.12s;
+  }
+
+  .tbl-action:hover { background: #EEEDFE; }
+  .tbl-action.danger { color: #E24B4A; }
+  .tbl-action.danger:hover { background: #FCEBEB; border-color: #FCEBEB; }
+
+  /* ── CHART BAR ── */
+  .chart-bars { display: flex; gap: 8px; align-items: flex-end; height: 120px; padding-top: 10px; }
+
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+  .bar-fill {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    background: #534AB7;
+    transition: height 0.6s cubic-bezier(.4,0,.2,1);
+    min-height: 4px;
+  }
+
+  .bar-fill.light { background: #AFA9EC; }
+
+  .bar-lbl { font-size: 10px; color: #aaa; font-weight: 500; }
+  .bar-num { font-size: 10px; font-weight: 700; color: #534AB7; }
+
+  .chart-legend {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #888;
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ── DONUT CHART ── */
+  .donut-wrap { display: flex; align-items: center; gap: 1rem; }
+
+  .donut-svg { flex-shrink: 0; }
+
+  .donut-legend { display: flex; flex-direction: column; gap: 8px; }
+
+  .dl-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .dl-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dl-name { color: #555; font-weight: 500; flex: 1; }
+  .dl-pct  { font-weight: 700; color: #1a1a2e; }
+
+  /* ── ACTIVITY FEED ── */
+  .activity-list { display: flex; flex-direction: column; gap: 0; }
+
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f4f3fb;
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .act-icon {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 15px;
+  }
+
+  .act-icon.purple { background: #EEEDFE; color: #534AB7; }
+  .act-icon.green  { background: #EAF3DE; color: #3B6D11; }
+  .act-icon.amber  { background: #FAEEDA; color: #BA7517; }
+  .act-icon.red    { background: #FCEBEB; color: #E24B4A; }
+
+  .act-body { flex: 1; }
+  .act-body p   { font-size: 12px; color: #444; line-height: 1.4; }
+  .act-body p b { color: #1a1a2e; }
+  .act-time     { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+  /* ── ADD INTERNSHIP FORM ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+  .form-field { display: flex; flex-direction: column; gap: 5px; }
+
+  .form-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .form-field input,
+  .form-field select {
+    padding: 9px 12px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    border: 1.5px solid #e8e6f5;
+    border-radius: 9px;
+    background: #fafafa;
+    color: #1a1a2e;
+    outline: none;
+    transition: border 0.2s;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus { border-color: #534AB7; background: #fff; }
+
+  .form-full { grid-column: span 2; }
+
+  /* ── TOP COMPANIES ── */
+  .company-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f4f3fb;
+  }
+
+  .company-row:last-child { border-bottom: none; }
+
+  .co-rank {
+    font-size: 12px;
+    font-weight: 700;
+    color: #aaa;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .co-name { font-size: 13px; font-weight: 600; color: #1a1a2e; flex: 1; }
+  .co-count { font-size: 12px; font-weight: 700; color: #534AB7; }
+
+  .co-bar-wrap { width: 60px; height: 5px; background: #f0eff8; border-radius: 3px; overflow: hidden; }
+  .co-bar-fill { height: 100%; background: #534AB7; border-radius: 3px; }
+
+  /* ── USER ROW ── */
+  .user-avatar-sm {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #534AB7;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #EEEDFE;
+    margin-right: 8px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,26,46,0.5);
+    z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+    padding: 1.5rem;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: #fff;
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: 100%; max-width: 480px;
+    transform: scale(0.95);
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+  }
+
+  .modal-overlay.show .modal { transform: scale(1); }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  .modal-header h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+
+  .modal-close {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    border: 1px solid #ece9f8;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 16px;
+  }
+
+  .modal-close:hover { background: #f4f3fb; color: #534AB7; }
+
+  .modal-save-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 10px;
+    background: #534AB7;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 0.75rem;
+    transition: background 0.15s;
+  }
+
+  .modal-save-btn:hover { background: #3C3489; }
+
+  /* ── SEARCH BAR ── */
+  .tbl-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f4f3fb;
+    border-radius: 9px;
+    padding: 7px 12px;
+    margin-bottom: 1rem;
+  }
+
+  .tbl-search i { font-size: 16px; color: #aaa; }
+
+  .tbl-search input {
+    border: none;
+    outline: none;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    background: transparent;
+    color: #1a1a2e;
+    width: 100%;
+  }
+
+  .tbl-search input::placeholder { color: #ccc; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: #1a1a2e;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 99px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    z-index: 200;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main-wrap { margin-left: 0; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-full { grid-column: span 1; }
+  }
+
+  .menu-toggle {
+    display: none;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #534AB7;
+  }
+
+  .menu-toggle i { font-size: 20px; }
+
+  @media (max-width: 900px) {
+    .menu-toggle { display: flex; }
+  }
+
+  .overlay-bg {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 55;
+  }
+
+  .overlay-bg.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><i class="ti ti-school"></i></div>
+    <span>InternHub</span>
+  </div>
+
+  <div class="sidebar-label">Main</div>
+  <button class="nav-link active" onclick="showSection('dashboard')">
+    <i class="ti ti-layout-dashboard"></i> Dashboard
+  </button>
+  <button class="nav-link" onclick="showSection('internships')">
+    <i class="ti ti-briefcase"></i> Internships
+  </button>
+  <button class="nav-link" onclick="showSection('applications')">
+    <i class="ti ti-clipboard-list"></i> Applications
+  </button>
+  <button class="nav-link" onclick="showSection('users')">
+    <i class="ti ti-users"></i> Users
+  </button>
+
+  <div class="sidebar-label">Settings</div>
+  <button class="nav-link" onclick="showToast('Opening analytics…')">
+    <i class="ti ti-chart-bar"></i> Analytics
+  </button>
+  <button class="nav-link" onclick="showToast('Opening settings…')">
+    <i class="ti ti-settings"></i> Settings
+  </button>
+
+  <div class="sidebar-bottom">
+    <button class="nav-link" onclick="confirmLogout()">
+      <i class="ti ti-logout"></i> Logout
+    </button>
+  </div>
+</div>
+
+<div class="overlay-bg" id="overlayBg" onclick="closeSidebar()"></div>
+
+<!-- MAIN WRAP -->
+<div class="main-wrap">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button class="menu-toggle" onclick="toggleSidebar()"><i class="ti ti-menu-2"></i></button>
+      <h2 id="pageTitle">Dashboard</h2>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" onclick="showToast('No new notifications')">
+        <i class="ti ti-bell"></i>
+        <div class="notif-dot"></div>
+      </button>
+      <button class="topbar-icon-btn" onclick="showToast('Search feature coming soon')">
+        <i class="ti ti-search"></i>
+      </button>
+      <div class="admin-avatar" onclick="showToast('Admin profile')">AD</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ── DASHBOARD SECTION ── -->
+    <div id="sec-dashboard">
+      <div class="page-header">
+        <div>
+          <h1>Dashboard Overview</h1>
+          <p>Welcome back, Admin 👋 Here's what's happening today.</p>
+        </div>
+        <button class="primary-btn" onclick="openAddModal()">
+          <i class="ti ti-plus"></i> Add Internship
+        </button>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon purple"><i class="ti ti-users"></i></div>
+            <span class="stat-trend up">↑ 12%</span>
+          </div>
+          <div class="stat-num" id="totalUsers">1,284</div>
+          <div class="stat-lbl">Total Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon green"><i class="ti ti-briefcase"></i></div>
+            <span class="stat-trend up">↑ 8%</span>
+          </div>
+          <div class="stat-num" id="totalInternships">347</div>
+          <div class="stat-lbl">Internships Listed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon amber"><i class="ti ti-clipboard-list"></i></div>
+            <span class="stat-trend up">↑ 21%</span>
+          </div>
+          <div class="stat-num" id="totalApplications">5,620</div>
+          <div class="stat-lbl">Total Applications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon red"><i class="ti ti-trophy"></i></div>
+            <span class="stat-trend down">↓ 3%</span>
+          </div>
+          <div class="stat-num">182</div>
+          <div class="stat-lbl">Placements</div>
+        </div>
+      </div>
+
+      <!-- CHART + PIE -->
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ti ti-chart-bar"></i> Applications per Month</h3>
+            <button class="card-action">2026 ▾</button>
+          </div>
+          <div class="chart-bars" id="chartBars"></div>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div> Applications</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#AFA9EC"></div> Placements</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ti ti-chart-donut"></i> Status Split</h3>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="35" fill="none" stroke="#f0eff8" stroke-width="18"/>
+              <circle cx="50" cy="50" r="35" fill="none" stroke="#534AB7" stroke-width="18"
+                stroke-dasharray="88 132" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="35" fill="none" stroke="#EF9F27" stroke-width="18"
+                stroke-dasharray="44 176" stroke-dashoffset="-88" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="35" fill="none" stroke="#639922" stroke-width="18"
+                stroke-dasharray="26 194" stroke-dashoffset="-132" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="35" fill="none" stroke="#E24B4A" stroke-width="18"
+                stroke-dasharray="22 198" stroke-dashoffset="-158" transform="rotate(-90 50 50)"/>
+              <text x="50" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#1a1a2e" font-family="Poppins">5.6K</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="dl-item"><div class="dl-dot" style="background:#534AB7"></div><span class="dl-name">Applied</span><span class="dl-pct">40%</span></div>
+              <div class="dl-item"><div class="dl-dot" style="background:#EF9F27"></div><span class="dl-name">Interview</span><span class="dl-pct">20%</span></div>
+              <div class="dl-item"><div class="dl-dot" style="background:#639922"></div><span class="dl-name">Selected</span><span class="dl-pct">12%</span></div>
+              <div class="dl-item"><div class="dl-dot" style="background:#E24B4A"></div><span class="dl-name">Rejected</span><span class="dl-pct">10%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT APPS + ACTIVITY -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ti ti-clipboard-list"></i> Recent Applications</h3>
+            <button class="card-action" onclick="showSection('applications')">View all</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Company</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="recentAppsTbl"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="ti ti-activity"></i> Activity Feed</h3>
+          </div>
+          <div class="activity-list" id="activityFeed"></div>
+        </div>
+      </div>
+
+      <!-- TOP COMPANIES -->
+      <div class="card" style="margin-bottom:1.5rem">
+        <div class="card-header">
+          <h3><i class="ti ti-building"></i> Top Companies by Applications</h3>
+        </div>
+        <div id="topCompanies"></div>
+      </div>
+    </div>
+
+    <!-- ── INTERNSHIPS SECTION ── -->
+    <div id="sec-internships" style="display:none">
+      <div class="page-header">
+        <div>
+          <h1>Manage Internships</h1>
+          <p>Add, edit or remove internship listings</p>
+        </div>
+        <button class="primary-btn" onclick="openAddModal()">
+          <i class="ti ti-plus"></i> Add Internship
+        </button>
+      </div>
+      <div class="card">
+        <div class="tbl-search">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Search company or role…" oninput="filterInternshipTable(this.value)">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Location</th>
+                <th>Stipend</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="internshipsTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── APPLICATIONS SECTION ── -->
+    <div id="sec-applications" style="display:none">
+      <div class="page-header">
+        <div>
+          <h1>All Applications</h1>
+          <p>Review and update application statuses</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tbl-search">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Search student or company…" oninput="filterAppTable(this.value)">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="allAppsTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── USERS SECTION ── -->
+    <div id="sec-users" style="display:none">
+      <div class="page-header">
+        <div>
+          <h1>Manage Users</h1>
+          <p>View and manage student accounts</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tbl-search">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Search by name or email…" oninput="filterUserTable(this.value)">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Email</th>
+                <th>College</th>
+                <th>Applications</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADD INTERNSHIP MODAL -->
+<div class="modal-overlay" id="addModal" onclick="closeAddModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Internship</h3>
+      <button class="modal-close" onclick="closeAddModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Company Name</label>
+        <input type="text" id="f-company" placeholder="e.g. Google">
+      </div>
+      <div class="form-field">
+        <label>Role</label>
+        <input type="text" id="f-role" placeholder="e.g. SWE Intern">
+      </div>
+      <div class="form-field">
+        <label>Location</label>
+        <input type="text" id="f-location" placeholder="e.g. Bangalore">
+      </div>
+      <div class="form-field">
+        <label>Stipend</label>
+        <input type="text" id="f-stipend" placeholder="e.g. ₹25,000">
+      </div>
+      <div class="form-field">
+        <label>Duration</label>
+        <select id="f-duration">
+          <option>1 Month</option>
+          <option>2 Months</option>
+          <option>3 Months</option>
+          <option selected>6 Months</option>
+          <option>1 Year</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Work Type</label>
+        <select id="f-type">
+          <option value="hybrid">Hybrid</option>
+          <option value="remote">Remote</option>
+          <option value="onsite">On-site</option>
+        </select>
+      </div>
+      <div class="form-field form-full">
+        <label>Category</label>
+        <select id="f-cat">
+          <option>Tech</option>
+          <option>Design</option>
+          <option>Data</option>
+          <option>Marketing</option>
+          <option>Finance</option>
+        </select>
+      </div>
+    </div>
+    <button class="modal-save-btn" onclick="saveInternship()">
+      <i class="ti ti-check" style="margin-right:6px; vertical-align:-2px;"></i> Save Internship
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── DATA ── */
+  let internships = JSON.parse(localStorage.getItem('admin_internships') || 'null') || [
+    { id:1, logo:'🪟', company:'Microsoft', role:'SWE Intern',         location:'Bangalore', stipend:'₹25,000', duration:'6 Months', type:'hybrid',  cat:'Tech',   status:'active' },
+    { id:2, logo:'🟠', company:'Amazon',    role:'Cloud Intern',        location:'Hyderabad', stipend:'₹35,000', duration:'6 Months', type:'onsite',  cat:'Tech',   status:'active' },
+    { id:3, logo:'🔵', company:'Google',    role:'SWE Intern',          location:'Hyderabad', stipend:'₹40,000', duration:'3 Months', type:'hybrid',  cat:'Tech',   status:'active' },
+    { id:4, logo:'🟣', company:'Zoho',      role:'Frontend Intern',     location:'Chennai',   stipend:'₹15,000', duration:'6 Months', type:'onsite',  cat:'Tech',   status:'active' },
+    { id:5, logo:'🟢', company:'Spotify',   role:'Design Intern',       location:'Remote',    stipend:'₹30,000', duration:'3 Months', type:'remote',  cat:'Design', status:'inactive'},
+    { id:6, logo:'🔴', company:'Meta',      role:'ML Intern',           location:'Bangalore', stipend:'₹45,000', duration:'6 Months', type:'hybrid',  cat:'Data',   status:'active' },
+  ];
+
+  const APPS = [
+    { student:'Chithra B',  avatar:'CB', company:'Google',    role:'SWE Intern',     status:'interview', date:'2026-05-10' },
+    { student:'Arjun R',    avatar:'AR', company:'Amazon',    role:'Cloud Intern',   status:'applied',   date:'2026-05-09' },
+    { student:'Priya S',    avatar:'PS', company:'Spotify',   role:'Design Intern',  status:'selected',  date:'2026-05-08' },
+    { student:'Rahul M',    avatar:'RM', company:'Meta',      role:'ML Intern',      status:'rejected',  date:'2026-05-07' },
+    { student:'Sneha T',    avatar:'ST', company:'Microsoft', role:'SWE Intern',     status:'applied',   date:'2026-05-06' },
+    { student:'Karan V',    avatar:'KV', company:'Zoho',      role:'Frontend Intern',status:'interview', date:'2026-05-05' },
+  ];
+
+  const USERS = [
+    { name:'Chithra B',  avatar:'CB', email:'chithra@gmail.com',  college:'Anna University',  apps:5, status:'active' },
+    { name:'Arjun R',    avatar:'AR', email:'arjun@gmail.com',    college:'IIT Madras',        apps:3, status:'active' },
+    { name:'Priya S',    avatar:'PS', email:'priya@gmail.com',    college:'VIT Vellore',       apps:7, status:'active' },
+    { name:'Rahul M',    avatar:'RM', email:'rahul@gmail.com',    college:'NIT Trichy',        apps:2, status:'inactive'},
+    { name:'Sneha T',    avatar:'ST', email:'sneha@gmail.com',    college:'SRM University',    apps:4, status:'active' },
+    { name:'Karan V',    avatar:'KV', email:'karan@gmail.com',    college:'Amrita University', apps:6, status:'active' },
+  ];
+
+  const CHART_DATA = [
+    { m:'Jan', apps:320, placed:28 },
+    { m:'Feb', apps:410, placed:35 },
+    { m:'Mar', apps:560, placed:48 },
+    { m:'Apr', apps:480, placed:42 },
+    { m:'May', apps:720, placed:65 },
+    { m:'Jun', apps:390, placed:31 },
+  ];
+
+  const TOP_COS = [
+    { name:'Google',    count:842, pct:100 },
+    { name:'Amazon',    count:720, pct:85  },
+    { name:'Microsoft', count:610, pct:72  },
+    { name:'Meta',      count:490, pct:58  },
+    { name:'Zoho',      count:380, pct:45  },
+  ];
+
+  const ACTIVITY = [
+    { icon:'ti-user-plus',      cls:'purple', text:'<b>Arjun R</b> registered a new account',          time:'2 min ago' },
+    { icon:'ti-send',           cls:'green',  text:'<b>Chithra B</b> applied to <b>Google SWE Intern</b>', time:'15 min ago' },
+    { icon:'ti-briefcase',      cls:'amber',  text:'New internship added — <b>Razorpay Backend Intern</b>', time:'1 hr ago' },
+    { icon:'ti-calendar-event', cls:'purple', text:'<b>Priya S</b> scheduled interview at <b>Spotify</b>', time:'2 hr ago' },
+    { icon:'ti-x',              cls:'red',    text:'<b>Rahul M</b> rejected from <b>Meta ML Intern</b>',  time:'5 hr ago' },
+  ];
+
+  let editId = null;
+
+  function saveLS() { localStorage.setItem('admin_internships', JSON.stringify(internships)); }
+
+  /* ── SECTIONS ── */
+  function showSection(name) {
+    ['dashboard','internships','applications','users'].forEach(s => {
+      document.getElementById('sec-' + s).style.display = s === name ? '' : 'none';
+    });
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('pageTitle').textContent =
+      name === 'dashboard' ? 'Dashboard' :
+      name === 'internships' ? 'Internships' :
+      name === 'applications' ? 'Applications' : 'Users';
+    if (name === 'internships')   renderInternshipsTable(internships);
+    if (name === 'applications')  renderAppsTable(APPS);
+    if (name === 'users')         renderUsersTable(USERS);
+    closeSidebar();
+  }
+
+  /* ── RENDER CHART ── */
+  function renderChart() {
+    const max = Math.max(...CHART_DATA.map(d => d.apps));
+    document.getElementById('chartBars').innerHTML = CHART_DATA.map(d => `
+      <div class="bar-col">
+        <div class="bar-num">${d.apps}</div>
+        <div style="display:flex;gap:3px;align-items:flex-end;height:80px">
+          <div class="bar-fill" style="height:${(d.apps/max)*80}px;width:14px"></div>
+          <div class="bar-fill light" style="height:${(d.placed/max)*80}px;width:10px"></div>
+        </div>
+        <div class="bar-lbl">${d.m}</div>
+      </div>
+    `).join('');
+  }
+
+  /* ── RECENT APPS TABLE ── */
+  function renderRecentApps() {
+    document.getElementById('recentAppsTbl').innerHTML = APPS.slice(0,5).map(a => `
+      <tr>
+        <td><span class="user-avatar-sm">${a.avatar}</span>${a.student}</td>
+        <td>${a.company}</td>
+        <td><span class="badge ${a.status}">${cap(a.status)}</span></td>
+        <td style="color:#aaa;font-size:12px">${a.date}</td>
+      </tr>
+    `).join('');
+  }
+
+  /* ── ACTIVITY ── */
+  function renderActivity() {
+    document.getElementById('activityFeed').innerHTML = ACTIVITY.map(a => `
+      <div class="activity-item">
+        <div class="act-icon ${a.cls}"><i class="ti ${a.icon}"></i></div>
+        <div class="act-body">
+          <p>${a.text}</p>
+          <div class="act-time">${a.time}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* ── TOP COMPANIES ── */
+  function renderTopCos() {
+    document.getElementById('topCompanies').innerHTML = TOP_COS.map((c,i) => `
+      <div class="company-row">
+        <div class="co-rank">#${i+1}</div>
+        <div class="co-logo">${['🔵','🟠','🪟','🔴','🟣'][i]}</div>
+        <div class="co-name">${c.name}</div>
+        <div class="co-bar-wrap"><div class="co-bar-fill" style="width:${c.pct}%"></div></div>
+        <div class="co-count">${c.count}</div>
+      </div>
+    `).join('');
+  }
+
+  /* ── INTERNSHIPS TABLE ── */
+  function renderInternshipsTable(list) {
+    document.getElementById('internshipsTbl').innerHTML = list.map(j => `
+      <tr>
+        <td><span class="co-logo">${j.logo}</span>${j.company}</td>
+        <td>${j.role}</td>
+        <td>${j.location}</td>
+        <td style="font-weight:700">${j.stipend}</td>
+        <td><span class="badge ${j.status}">${cap(j.status)}</span></td>
+        <td>
+          <button class="tbl-action" onclick="editInternship(${j.id})">Edit</button>
+          <button class="tbl-action danger" onclick="deleteInternship(${j.id})" style="margin-left:4px">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterInternshipTable(q) {
+    const f = internships.filter(j =>
+      j.company.toLowerCase().includes(q.toLowerCase()) ||
+      j.role.toLowerCase().includes(q.toLowerCase())
+    );
+    renderInternshipsTable(f);
+  }
+
+  function editInternship(id) {
+    editId = id;
+    const j = internships.find(x => x.id === id);
+    document.getElementById('modalTitle').textContent   = 'Edit Internship';
+    document.getElementById('f-company').value  = j.company;
+    document.getElementById('f-role').value     = j.role;
+    document.getElementById('f-location').value = j.location;
+    document.getElementById('f-stipend').value  = j.stipend;
+    document.getElementById('f-type').value     = j.type;
+    document.getElementById('addModal').classList.add('show');
+  }
+
+  function deleteInternship(id) {
+    if (!confirm('Delete this internship?')) return;
+    internships = internships.filter(j => j.id !== id);
+    saveLS();
+    renderInternshipsTable(internships);
+    showToast('Internship deleted');
+    document.getElementById('totalInternships').textContent = internships.length;
+  }
+
+  /* ── APPS TABLE ── */
+  function renderAppsTable(list) {
+    document.getElementById('allAppsTbl').innerHTML = list.map(a => `
+      <tr>
+        <td><span class="user-avatar-sm">${a.avatar}</span>${a.student}</td>
+        <td>${a.company}</td>
+        <td>${a.role}</td>
+        <td><span class="badge ${a.status}">${cap(a.status)}</span></td>
+        <td style="color:#aaa;font-size:12px">${a.date}</td>
+        <td>
+          <button class="tbl-action" onclick="showToast('Status updated')">Update</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterAppTable(q) {
+    const f = APPS.filter(a =>
+      a.student.toLowerCase().includes(q.toLowerCase()) ||
+      a.company.toLowerCase().includes(q.toLowerCase())
+    );
+    renderAppsTable(f);
+  }
+
+  /* ── USERS TABLE ── */
+  function renderUsersTable(list) {
+    document.getElementById('usersTbl').innerHTML = list.map(u => `
+      <tr>
+        <td><span class="user-avatar-sm">${u.avatar}</span>${u.name}</td>
+        <td style="color:#888;font-size:12px">${u.email}</td>
+        <td style="font-size:12px">${u.college}</td>
+        <td style="font-weight:700;color:#534AB7">${u.apps}</td>
+        <td><span class="badge ${u.status}">${cap(u.status)}</span></td>
+        <td>
+          <button class="tbl-action" onclick="showToast('Viewing ${u.name}\'s profile')">View</button>
+          <button class="tbl-action danger" onclick="showToast('User suspended')" style="margin-left:4px">Suspend</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterUserTable(q) {
+    const f = USERS.filter(u =>
+      u.name.toLowerCase().includes(q.toLowerCase()) ||
+      u.email.toLowerCase().includes(q.toLowerCase())
+    );
+    renderUsersTable(f);
+  }
+
+  /* ── ADD MODAL ── */
+  function openAddModal() {
+    editId = null;
+    document.getElementById('modalTitle').textContent = 'Add Internship';
+    ['f-company','f-role','f-location','f-stipend'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('addModal').classList.add('show');
+  }
+
+  function closeAddModal() { document.getElementById('addModal').classList.remove('show'); }
+  function closeAddModalOutside(e) { if (e.target.id === 'addModal') closeAddModal(); }
+
+  function saveInternship() {
+    const company  = document.getElementById('f-company').value.trim();
+    const role     = document.getElementById('f-role').value.trim();
+    const location = document.getElementById('f-location').value.trim();
+    const stipend  = document.getElementById('f-stipend').value.trim();
+    const duration = document.getElementById('f-duration').value;
+    const type     = document.getElementById('f-type').value;
+    const cat      = document.getElementById('f-cat').value;
+
+    if (!company || !role) { showToast('Company and role are required'); return; }
+
+    if (editId) {
+      const idx = internships.findIndex(j => j.id === editId);
+      internships[idx] = { ...internships[idx], company, role, location, stipend, duration, type, cat };
+      showToast('Internship updated ✓');
+    } else {
+      const logos = { Microsoft:'🪟', Amazon:'🟠', Google:'🔵', Zoho:'🟣', Meta:'🔴', Spotify:'🟢', default:'🏢' };
+      internships.unshift({
+        id: Date.now(), logo: logos[company] || logos.default,
+        company, role, location, stipend, duration, type, cat, status:'active'
+      });
+      document.getElementById('totalInternships').textContent = internships.length;
+      showToast('Internship added 🎉');
+    }
+
+    saveLS();
+    closeAddModal();
+    if (document.getElementById('sec-internships').style.display !== 'none')
+      renderInternshipsTable(internships);
+  }
+
+  /* ── SIDEBAR ── */
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlayBg').classList.toggle('show');
+  }
+
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlayBg').classList.remove('show');
+  }
+
+  /* ── LOGOUT ── */
+  function confirmLogout() {
+    if (confirm('Log out of admin panel?')) {
+      showToast('Logging out…');
+      setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+    }
+  }
+
+  /* ── TOAST ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  /* ── INIT ── */
+  renderChart();
+  renderRecentApps();
+  renderActivity();
+  renderTopCos();
+</script>
+
+</body>
+</html>

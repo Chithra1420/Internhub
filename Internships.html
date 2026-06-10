@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internships – InternHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0eff8;
+    min-height: 100vh;
+    padding-bottom: 90px;
+    color: #1a1a2e;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: #fff;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ece9f8;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #534AB7;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-icon i { font-size: 18px; color: #EEEDFE; }
+  .topbar h1 { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+
+  .notif-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    position: relative;
+    color: #534AB7;
+  }
+
+  .notif-btn i { font-size: 18px; }
+
+  .notif-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #E24B4A;
+    position: absolute;
+    top: 4px; right: 4px;
+    border: 1.5px solid #fff;
+  }
+
+  /* ── MAIN ── */
+  .main { padding: 1.25rem; max-width: 480px; margin: 0 auto; }
+
+  /* ── HERO SEARCH ── */
+  .hero-search {
+    background: linear-gradient(135deg, #534AB7 0%, #7F77DD 100%);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-search::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+  }
+
+  .hero-search h2 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+  .hero-search p  { font-size: 12px; opacity: 0.8; margin-bottom: 12px; }
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 9px 12px;
+  }
+
+  .search-bar i { font-size: 17px; color: #aaa; flex-shrink: 0; }
+
+  .search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    color: #1a1a2e;
+    background: transparent;
+  }
+
+  .search-bar input::placeholder { color: #ccc; }
+
+  .search-bar button {
+    background: #534AB7;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+
+  .search-bar button:hover { background: #3C3489; }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  .stat-pill {
+    background: #fff;
+    border-radius: 14px;
+    padding: 0.75rem;
+    text-align: center;
+    border: 1.5px solid #ece9f8;
+  }
+
+  .stat-pill .num { font-size: 18px; font-weight: 700; color: #534AB7; line-height: 1; }
+  .stat-pill .lbl { font-size: 10px; color: #aaa; font-weight: 500; margin-top: 3px; }
+
+  /* ── FILTER CHIPS ── */
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .filter-row::-webkit-scrollbar { display: none; }
+
+  .filter-btn-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #534AB7;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .filter-btn-icon:hover { background: #f4f3fb; }
+  .filter-btn-icon i { font-size: 18px; }
+
+  .chip {
+    flex-shrink: 0;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 99px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .chip.active { background: #534AB7; color: #fff; border-color: #534AB7; }
+  .chip:hover:not(.active) { background: #f4f3fb; color: #534AB7; }
+
+  /* ── CATEGORY SCROLL ── */
+  .cat-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 1.25rem;
+    scrollbar-width: none;
+  }
+
+  .cat-scroll::-webkit-scrollbar { display: none; }
+
+  .cat-card {
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 14px;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #ece9f8;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    min-width: 76px;
+  }
+
+  .cat-card:hover, .cat-card.active {
+    border-color: #534AB7;
+    box-shadow: 0 4px 14px rgba(83,74,183,0.10);
+  }
+
+  .cat-card .cat-emoji { font-size: 22px; margin-bottom: 4px; }
+  .cat-card .cat-name  { font-size: 11px; font-weight: 600; color: #444; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header h3 { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+  .section-header span { font-size: 12px; color: #888; }
+
+  /* ── FEATURED CARD ── */
+  .featured-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d2b54 100%);
+    border-radius: 18px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .featured-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .feat-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+
+  .feat-logo {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .feat-info h4   { font-size: 15px; font-weight: 700; }
+  .feat-info p    { font-size: 12px; opacity: 0.75; margin-top: 2px; }
+  .feat-badge     {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: #EF9F27;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .feat-chips { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+
+  .feat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 4px 9px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.85);
+  }
+
+  .feat-chip i { font-size: 12px; }
+
+  .feat-apply-btn {
+    background: #fff;
+    color: #534AB7;
+    border: none;
+    padding: 9px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .feat-apply-btn:hover { background: #EEEDFE; }
+
+  /* ── JOB CARDS ── */
+  .job-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.25rem; }
+
+  .job-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1rem;
+    border: 1.5px solid #ece9f8;
+    transition: box-shadow 0.15s, transform 0.15s;
+    cursor: pointer;
+  }
+
+  .job-card:hover {
+    box-shadow: 0 4px 16px rgba(83,74,183,0.10);
+    transform: translateY(-1px);
+  }
+
+  .job-card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .co-logo {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: #f4f3fb;
+    border: 1.5px solid #ece9f8;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .job-info { flex: 1; min-width: 0; }
+  .job-info h4 { font-size: 14px; font-weight: 700; color: #1a1a2e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .job-info p  { font-size: 12px; color: #888; margin-top: 2px; }
+
+  .save-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 20px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+    padding: 0;
+  }
+
+  .save-icon:hover { color: #534AB7; }
+  .save-icon.saved { color: #534AB7; }
+
+  .job-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+
+  .jchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #555;
+    background: #f4f3fb;
+    padding: 4px 9px;
+    border-radius: 7px;
+    border: 1px solid #ece9f8;
+    font-weight: 500;
+  }
+
+  .jchip i { font-size: 12px; color: #888; }
+
+  .job-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid #f4f3fb;
+  }
+
+  .stipend { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .stipend span { font-size: 11px; color: #aaa; font-weight: 500; }
+
+  .view-btn {
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 9px;
+    background: #EEEDFE;
+    color: #534AB7;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .view-btn:hover { background: #534AB7; color: #fff; }
+  .view-btn i { font-size: 14px; }
+
+  /* ── TAG BADGES ── */
+  .tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 99px;
+  }
+
+  .tag.new      { background: #EAF3DE; color: #3B6D11; }
+  .tag.hot      { background: #FCEBEB; color: #A32D2D; }
+  .tag.remote   { background: #E2F0FC; color: #1A6BA8; }
+  .tag.closing  { background: #FAEEDA; color: #854F0B; }
+
+  /* ── LOAD MORE ── */
+  .load-more-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border: 1.5px solid #ece9f8;
+    border-radius: 12px;
+    background: #fff;
+    color: #534AB7;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    gap: 7px;
+    transition: background 0.15s;
+    margin-bottom: 1.25rem;
+  }
+
+  .load-more-btn:hover { background: #f4f3fb; }
+  .load-more-btn i { font-size: 16px; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    display: none;
+  }
+
+  .empty-icon {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    background: #EEEDFE;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+  }
+
+  .empty-icon i { font-size: 32px; color: #534AB7; }
+  .empty-state h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .empty-state p  { font-size: 13px; color: #888; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid #ece9f8;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 14px;
+    z-index: 50;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: #bbb;
+    font-size: 10px;
+    font-weight: 500;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    padding: 0 12px;
+    transition: color 0.15s;
+    text-decoration: none;
+  }
+
+  .nav-item i { font-size: 22px; }
+  .nav-item.active { color: #534AB7; }
+  .nav-item:hover  { color: #534AB7; }
+
+  /* ── FILTER MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,26,46,0.5);
+    z-index: 100;
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    padding: 1.5rem 1.25rem 2rem;
+    width: 100%; max-width: 480px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  }
+
+  .modal-overlay.show .modal { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: #ece9f8;
+    border-radius: 2px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: #1a1a2e; }
+
+  .filter-section { margin-bottom: 1.25rem; }
+  .filter-section h4 { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 8px; }
+
+  .filter-chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .fchip-btn {
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 99px;
+    border: 1.5px solid #ece9f8;
+    background: #fff;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .fchip-btn.active { background: #534AB7; color: #fff; border-color: #534AB7; }
+
+  .apply-filter-btn {
+    width: 100%;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 12px;
+    background: #534AB7;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .apply-filter-btn:hover { background: #3C3489; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 90px; left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: #1a1a2e;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 99px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    z-index: 200;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-icon"><i class="ti ti-school"></i></div>
+    <h1>Internships</h1>
+  </div>
+  <button class="notif-btn" onclick="showToast('No new notifications')">
+    <i class="ti ti-bell"></i>
+    <div class="notif-dot"></div>
+  </button>
+</div>
+
+<div class="main">
+
+  <!-- HERO SEARCH -->
+  <div class="hero-search">
+    <h2>Find Your Dream Internship</h2>
+    <p>500+ opportunities waiting for you</p>
+    <div class="search-bar">
+      <i class="ti ti-search"></i>
+      <input type="text" id="searchInput" placeholder="Role, company or location…" oninput="filterJobs()">
+      <button onclick="filterJobs()">Search</button>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-pill">
+      <div class="num">500+</div>
+      <div class="lbl">Openings</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num">120+</div>
+      <div class="lbl">Companies</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num">48</div>
+      <div class="lbl">New Today</div>
+    </div>
+  </div>
+
+  <!-- FILTER ROW -->
+  <div class="filter-row">
+    <button class="filter-btn-icon" onclick="openFilterModal()" title="Filters">
+      <i class="ti ti-adjustments-horizontal"></i>
+    </button>
+    <button class="chip active" onclick="setChip(this,'all')">All</button>
+    <button class="chip" onclick="setChip(this,'remote')">Remote</button>
+    <button class="chip" onclick="setChip(this,'hybrid')">Hybrid</button>
+    <button class="chip" onclick="setChip(this,'onsite')">On-site</button>
+    <button class="chip" onclick="setChip(this,'new')">New</button>
+    <button class="chip" onclick="setChip(this,'stipend')">Paid</button>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="cat-scroll">
+    <div class="cat-card active" onclick="setCat(this,'all')">
+      <div class="cat-emoji">🌐</div>
+      <div class="cat-name">All</div>
+    </div>
+    <div class="cat-card" onclick="setCat(this,'tech')">
+      <div class="cat-emoji">💻</div>
+      <div class="cat-name">Tech</div>
+    </div>
+    <div class="cat-card" onclick="setCat(this,'design')">
+      <div class="cat-emoji">🎨</div>
+      <div class="cat-name">Design</div>
+    </div>
+    <div class="cat-card" onclick="setCat(this,'data')">
+      <div class="cat-emoji">📊</div>
+      <div class="cat-name">Data</div>
+    </div>
+    <div class="cat-card" onclick="setCat(this,'marketing')">
+      <div class="cat-emoji">📣</div>
+      <div class="cat-name">Marketing</div>
+    </div>
+    <div class="cat-card" onclick="setCat(this,'finance')">
+      <div class="cat-emoji">💰</div>
+      <div class="cat-name">Finance</div>
+    </div>
+  </div>
+
+  <!-- FEATURED -->
+  <div class="section-header">
+    <h3>⚡ Featured</h3>
+  </div>
+
+  <div class="featured-card" onclick="viewJob(0)">
+    <div class="feat-top">
+      <div class="feat-logo">🪟</div>
+      <div class="feat-info">
+        <h4>Software Engineer Intern</h4>
+        <p>Microsoft India</p>
+      </div>
+      <span class="feat-badge">Featured</span>
+    </div>
+    <div class="feat-chips">
+      <span class="feat-chip"><i class="ti ti-map-pin"></i> Bangalore</span>
+      <span class="feat-chip"><i class="ti ti-currency-rupee"></i> ₹25,000/mo</span>
+      <span class="feat-chip"><i class="ti ti-clock"></i> 6 Months</span>
+      <span class="feat-chip"><i class="ti ti-building"></i> Hybrid</span>
+    </div>
+    <button class="feat-apply-btn" onclick="event.stopPropagation(); quickApply('Microsoft')">
+      Apply Now →
+    </button>
+  </div>
+
+  <!-- ALL JOBS -->
+  <div class="section-header">
+    <h3>All Internships</h3>
+    <span id="countLabel">12 results</span>
+  </div>
+
+  <div class="job-list" id="jobList"></div>
+
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon"><i class="ti ti-search-off"></i></div>
+    <h3>No results found</h3>
+    <p>Try different keywords or remove filters</p>
+  </div>
+
+  <button class="load-more-btn" onclick="showToast('Loading more internships…')">
+    <i class="ti ti-refresh"></i> Load More
+  </button>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-item" onclick="window.location.href='dashboard.html'">
+    <i class="ti ti-home"></i> Home
+  </button>
+  <button class="nav-item active">
+    <i class="ti ti-briefcase"></i> Jobs
+  </button>
+  <button class="nav-item" onclick="window.location.href='tracker.html'">
+    <i class="ti ti-clipboard-list"></i> Tracker
+  </button>
+  <button class="nav-item" onclick="window.location.href='skills.html'">
+    <i class="ti ti-star"></i> Skills
+  </button>
+  <button class="nav-item" onclick="window.location.href='profile.html'">
+    <i class="ti ti-user"></i> Profile
+  </button>
+</div>
+
+<!-- FILTER MODAL -->
+<div class="modal-overlay" id="filterModal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>Filter Internships</h3>
+
+    <div class="filter-section">
+      <h4>Work Type</h4>
+      <div class="filter-chips-wrap">
+        <button class="fchip-btn active" onclick="toggleFChip(this)">All</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">Remote</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">Hybrid</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">On-site</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <h4>Category</h4>
+      <div class="filter-chips-wrap">
+        <button class="fchip-btn active" onclick="toggleFChip(this)">All</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">Tech</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">Design</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">Data</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">Marketing</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">Finance</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <h4>Stipend Range</h4>
+      <div class="filter-chips-wrap">
+        <button class="fchip-btn" onclick="toggleFChip(this)">Any</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">₹5K–₹15K</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">₹15K–₹30K</button>
+        <button class="fchip-btn active" onclick="toggleFChip(this)">₹30K+</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <h4>Duration</h4>
+      <div class="filter-chips-wrap">
+        <button class="fchip-btn" onclick="toggleFChip(this)">1–2 Months</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">3 Months</button>
+        <button class="fchip-btn active" onclick="toggleFChip(this)">6 Months</button>
+        <button class="fchip-btn" onclick="toggleFChip(this)">1 Year</button>
+      </div>
+    </div>
+
+    <button class="apply-filter-btn" onclick="applyFilters()">
+      <i class="ti ti-check" style="margin-right:6px; vertical-align:-2px;"></i> Apply Filters
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const JOBS = [
+    { id:0,  logo:'🪟', company:'Microsoft',  role:'Software Engineer Intern', location:'Bangalore', stipend:'₹25,000', duration:'6 Months', type:'hybrid',  cat:'tech',      tags:['new'],     skills:['Java','DSA','SQL'] },
+    { id:1,  logo:'🟠', company:'Amazon',     role:'Cloud Solutions Intern',   location:'Hyderabad', stipend:'₹35,000', duration:'6 Months', type:'onsite',  cat:'tech',      tags:['hot'],     skills:['AWS','Python'] },
+    { id:2,  logo:'🔵', company:'Google',     role:'SWE Intern',               location:'Hyderabad', stipend:'₹40,000', duration:'3 Months', type:'hybrid',  cat:'tech',      tags:['hot','new'],skills:['C++','Algorithms'] },
+    { id:3,  logo:'🟣', company:'Zoho',       role:'Frontend Intern',          location:'Chennai',   stipend:'₹15,000', duration:'6 Months', type:'onsite',  cat:'tech',      tags:[],          skills:['React','CSS'] },
+    { id:4,  logo:'🟢', company:'Spotify',    role:'Product Design Intern',    location:'Remote',    stipend:'₹30,000', duration:'3 Months', type:'remote',  cat:'design',    tags:['remote'],  skills:['Figma','UX'] },
+    { id:5,  logo:'🔴', company:'Meta',       role:'ML Engineer Intern',       location:'Bangalore', stipend:'₹45,000', duration:'6 Months', type:'hybrid',  cat:'data',      tags:['hot'],     skills:['Python','ML'] },
+    { id:6,  logo:'💙', company:'Flipkart',   role:'Data Analyst Intern',      location:'Bangalore', stipend:'₹20,000', duration:'3 Months', type:'onsite',  cat:'data',      tags:['new'],     skills:['SQL','Excel'] },
+    { id:7,  logo:'🔶', company:'Swiggy',     role:'Growth Marketing Intern',  location:'Bangalore', stipend:'₹18,000', duration:'2 Months', type:'hybrid',  cat:'marketing', tags:[],          skills:['Analytics','SEO'] },
+    { id:8,  logo:'🏦', company:'HDFC Bank',  role:'Finance Intern',           location:'Mumbai',    stipend:'₹12,000', duration:'2 Months', type:'onsite',  cat:'finance',   tags:[],          skills:['Excel','Finance'] },
+    { id:9,  logo:'🟡', company:'Razorpay',   role:'Backend Intern',           location:'Bangalore', stipend:'₹30,000', duration:'6 Months', type:'hybrid',  cat:'tech',      tags:['new'],     skills:['Node.js','SQL'] },
+    { id:10, logo:'⚫', company:'CRED',       role:'UI/UX Design Intern',      location:'Remote',    stipend:'₹25,000', duration:'3 Months', type:'remote',  cat:'design',    tags:['remote'],  skills:['Figma','Prototyping'] },
+    { id:11, logo:'🔷', company:'Infosys',    role:'Digital Marketing Intern', location:'Pune',      stipend:'₹10,000', duration:'3 Months', type:'onsite',  cat:'marketing', tags:[],          skills:['Social Media','Canva'] },
+  ];
+
+  let saved       = new Set(JSON.parse(localStorage.getItem('saved_jobs') || '[]'));
+  let activeChip  = 'all';
+  let activeCatF  = 'all';
+
+  function saveLS() { localStorage.setItem('saved_jobs', JSON.stringify([...saved])); }
+
+  function filterJobs() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+
+    let list = JOBS.filter(j => {
+      const matchSearch = !q ||
+        j.company.toLowerCase().includes(q) ||
+        j.role.toLowerCase().includes(q) ||
+        j.location.toLowerCase().includes(q);
+      const matchChip =
+        activeChip === 'all'    ? true :
+        activeChip === 'remote' ? j.type === 'remote' :
+        activeChip === 'hybrid' ? j.type === 'hybrid' :
+        activeChip === 'onsite' ? j.type === 'onsite' :
+        activeChip === 'new'    ? j.tags.includes('new') :
+        activeChip === 'stipend'? true : true;
+      const matchCat = activeCatF === 'all' || j.cat === activeCatF;
+      return matchSearch && matchChip && matchCat;
+    });
+
+    const el    = document.getElementById('jobList');
+    const empty = document.getElementById('emptyState');
+    document.getElementById('countLabel').textContent = list.length + ' results';
+
+    if (list.length === 0) {
+      el.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+    el.innerHTML = list.map(j => `
+      <div class="job-card" onclick="viewJob(${j.id})">
+        <div class="job-card-top">
+          <div class="co-logo">${j.logo}</div>
+          <div class="job-info">
+            <h4>${j.role}</h4>
+            <p>${j.company}</p>
+          </div>
+          <button class="save-icon ${saved.has(j.id) ? 'saved' : ''}"
+            onclick="event.stopPropagation(); toggleSave(${j.id}, this)"
+            aria-label="Save">
+            <i class="ti ti-bookmark${saved.has(j.id) ? '-filled' : ''}"></i>
+          </button>
+        </div>
+        <div class="job-chips">
+          <span class="jchip"><i class="ti ti-map-pin"></i>${j.location}</span>
+          <span class="jchip"><i class="ti ti-clock"></i>${j.duration}</span>
+          <span class="jchip"><i class="ti ti-building"></i>${capitalize(j.type)}</span>
+          ${j.tags.map(t => `<span class="tag ${t}">${t === 'new' ? '🆕 New' : t === 'hot' ? '🔥 Hot' : t === 'remote' ? '🌐 Remote' : t}</span>`).join('')}
+        </div>
+        <div class="job-card-footer">
+          <div class="stipend">${j.stipend} <span>/ month</span></div>
+          <button class="view-btn"><i class="ti ti-eye"></i> View</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function setChip(el, val) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    activeChip = val;
+    filterJobs();
+  }
+
+  function setCat(el, val) {
+    document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    activeCatF = val;
+    filterJobs();
+  }
+
+  function toggleSave(id, btn) {
+    if (saved.has(id)) {
+      saved.delete(id);
+      btn.classList.remove('saved');
+      btn.querySelector('i').className = 'ti ti-bookmark';
+      showToast('Removed from saved');
+    } else {
+      saved.add(id);
+      btn.classList.add('saved');
+      btn.querySelector('i').className = 'ti ti-bookmark-filled';
+      showToast('Saved to your list ✓');
+    }
+    saveLS();
+  }
+
+  function viewJob(id) {
+    showToast('Opening ' + JOBS[id].company + ' details…');
+    setTimeout(() => { window.location.href = 'job-detail.html'; }, 700);
+  }
+
+  function quickApply(company) {
+    showToast('Applied to ' + company + ' 🎉');
+  }
+
+  /* ── FILTER MODAL ── */
+  function openFilterModal() {
+    document.getElementById('filterModal').classList.add('show');
+  }
+
+  function closeModalOutside(e) {
+    if (e.target.id === 'filterModal')
+      document.getElementById('filterModal').classList.remove('show');
+  }
+
+  function toggleFChip(el) {
+    el.classList.toggle('active');
+  }
+
+  function applyFilters() {
+    document.getElementById('filterModal').classList.remove('show');
+    showToast('Filters applied ✓');
+    filterJobs();
+  }
+
+  /* ── TOAST ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  filterJobs();
+</script>
+
+</body>
+</html>
