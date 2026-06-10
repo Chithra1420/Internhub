@@ -60,56 +60,6 @@ InternHub/
     └── internhub.sql
 ```
 
-## ⚙️ Installation
-
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/internhub.git
-```
-
-### 2️⃣ Move Project to XAMPP
-
-Copy the project folder into:
-
-```bash
-C:\xampp\htdocs\
-```
-
-### 3️⃣ Start Services
-
-- Start Apache
-- Start MySQL
-
-from XAMPP Control Panel.
-
-### 4️⃣ Create Database
-
-Open:
-
-```bash
-http://localhost/phpmyadmin
-```
-
-Create a database:
-
-```sql
-internhub
-```
-
-Import:
-
-```sql
-internhub.sql
-```
-
-### 5️⃣ Run Project
-
-Open:
-
-```bash
-http://localhost/internhub
-```
 
 ## 🎯 Future Enhancements
 
@@ -133,9 +83,7 @@ Add screenshots here:
 
 **Chithra B**
 
-Computer Science Engineering Student
-
-GitHub: https://github.com/yourusername
+Computer Science Engineering Student.
 
 ## 📜 License
 
